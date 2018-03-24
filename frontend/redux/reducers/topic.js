@@ -44,3 +44,18 @@ export const get_topics_action =
 
 export const topics =
 	createReducerAsync(get_topics_action);
+
+const get_topic = () => {
+	return new Promise((resolve, reject) => {
+		resolve({
+			_id: 1,
+			title: 'Gun Control'
+		});
+	});
+};
+
+export const get_topic_action =
+	createActionAsync('GET_TOPIC', get_topic);
+
+export const topic =
+	createReducerAsync(get_topic_action);

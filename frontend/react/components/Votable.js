@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 
 import { Card } from './Card.js';
-import CustomRadio  from '../elements/CustomRadio/CustomRadio';
+import CustomRadio  from '../elements/CustomRadio';
 
 class Votable extends Component {
 	constructor(props) {

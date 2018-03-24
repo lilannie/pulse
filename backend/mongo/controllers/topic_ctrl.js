@@ -11,6 +11,7 @@ exports.getAllTopics = () => {
   //   });
 };
 
+// TODO
 exports.getTopicPosts = topicID => {
   // return [
   //     {
@@ -91,6 +92,7 @@ exports.getTopicPosts = topicID => {
   //   ];
 };
 
+// TODO
 exports.getTopicVotables = topicID => {
   // return [
   //     {
