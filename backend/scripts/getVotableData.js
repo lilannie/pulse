@@ -78,8 +78,7 @@ getVotables(cursor).then(json => {
 
 const processText = descriptions => {
   for (let i = 0; i < descriptions.length; i++) {
-    nlp(descriptions[i].text)
-      .topics()
-      .out();
+    console.log(descriptions[i]);
+    // TODO
   }
 };
