@@ -5,8 +5,9 @@ const votable_data = require('./votables');
 const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 
-db.connect().then(() => {
+db.connect();
 
+db.on('open', () => {
   const votables = votable_data.votables;
   const input_path = 'citizen.csv';
   const demographics = [
@@ -22,13 +23,16 @@ db.connect().then(() => {
     'educ2',
     'ideo'
   ];
-  
+
   setTimeout(() => {
-    db.collection.insertMany(votables);
+    db.collection.insertMany(votables, (error, doc) => {
+      console.log(error, doc);
+    });
   }, 5000)
   
   /* Return/select all votables in order to obtain votable ID for votes */
 
+  let citizens = [];
   csv()
     .fromFile(input_path)
     .on('json', row => {
@@ -44,7 +48,7 @@ db.connect().then(() => {
 
       /* TODO: Insert Citizen into MongoDB 
       get citizen_id as return value and use for vote */
-      // console.log(citizen_data);
+      citizens.push(citizen_data);
 
       for (votable of votables) {
         let choices = votable.choices;
@@ -58,8 +62,12 @@ db.connect().then(() => {
         };
         //console.log(vote);
       } // end for loop over votables
-      process.exit();
+      //process.exit();
     });
+
+  setTimeout(() => {
+    db.collection.insertMany(citizens);
+  }, 20000)
 
   const convertDemographic = (key, row) => {
     let data = row[key];
@@ -72,7 +80,7 @@ db.connect().then(() => {
     data--;
     return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
   };
-
 });
+
 
 
