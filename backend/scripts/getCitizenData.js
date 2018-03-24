@@ -1,6 +1,10 @@
 const csv = require('csvtojson');
 const labels = require('./conversions');
 const votable_data = require('./votables');
+const db = require('../mongo/config/database');
+const votable_ctrl = require('../mongo/controllers/votable_ctrl');
+
+db.connect();
 
 const votables = votable_data.votables;
 const input_path = 'citizen.csv';
@@ -14,8 +18,9 @@ for(votable of votables) {
   let col =  votable.col;
   delete votable.col;
   
-  /* TODO: Insert votable into Mongo here */
-  
+  //console.log(votable);
+  /* Insert votable into Mongo */
+  votable_ctrl.insert(votable);
   votable.col = col;
 }// end foreach votable
 
@@ -36,7 +41,7 @@ csv().fromFile(input_path).on('json', (row) => {
   
   /* TODO: Insert Citizen into MongoDB 
      get citizen_id as return value and use for vote */
-  console.log(citizen_data);
+  //console.log(citizen_data);
 
   for(votable of votables){
     let choices = votable.choices;
@@ -49,7 +54,7 @@ csv().fromFile(input_path).on('json', (row) => {
       choice: choice
     };
 
-    console.log(vote);
+    //console.log(vote);
   }// end for loop over votables
 
   process.exit();
@@ -66,3 +71,5 @@ const convertChoice = (key, row, choices) => {
   data--;
   return (data > choices.length || data < 0 || isNaN(data)) ? "Don't Know" : choices[data];
 };
+
+db.close();
