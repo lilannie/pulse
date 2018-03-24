@@ -1,0 +1,14 @@
+{
+  "name": "noderest",
+  "description": "Demo REST API with Node",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "3.x",
+    "ganache-cli": "^6.1.0",
+    "install": "^0.10.4",
+    "solc": "^0.4.21",
+    "web3": "^0.20.6"
+  }
+}
