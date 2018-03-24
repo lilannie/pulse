@@ -23,7 +23,10 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
   				data: result
   			});
   		})
-  		.catch(error => {});
+  		.catch(error => {
+				console.log('ERROR on blockchain');
+				console.log(error);
+			});
 	});
 
 	//vote on specified contract. True if successful. False if not

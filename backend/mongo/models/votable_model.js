@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Votable = new mongoose.Schema({
-  // contract_id: Number,
+  contract_id: String,
   // creator_id: Number,
   // title: String,
   description: String,
