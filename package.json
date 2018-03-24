@@ -32,6 +32,8 @@
     "body-parser": "^1.18.2",
     "chartist": "^0.11.0",
     "classnames": "^2.2.5",
+    "csv-parse": "^2.0.4",
+    "csvtojson": "^1.1.9",
     "compromise": "^11.5.3",
     "ejs": "^2.5.7",
     "express": "^4.16.3",
