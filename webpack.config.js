@@ -21,16 +21,10 @@ module.exports = {
     },
     extensions: ['.js', '.jsx']
   },
-	// node: {
-	// 	fs: 'empty',
-	// 	net: 'empty',
-	// 	tls: 'empty',
-	// 	dns: 'empty'
-	// },
   module: {
 		rules: [
       {
-	      test: /\.js?$/,
+	      test: /\.jsx?$/,
 	      exclude: /(node_modules|bower_components)/,
 	      loader: 'babel-loader'
       },
@@ -49,11 +43,11 @@ module.exports = {
     ]
   },
 	// Have webpack load React when needed without having to explicitly require it in your code
-	plugins: [
-		new webpack.ProvidePlugin({
-			"React": "react",
-		}),
-	],
+	// plugins: [
+	// 	new webpack.ProvidePlugin({
+	// 		"React": "react",
+	// 	}),
+	// ],
 };
 
 

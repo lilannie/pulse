@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import { Switch, Route } from 'react-router-dom';
 
 import reducers from './redux/reducers';
-import App from './react/App';
+import App from './react/containers/App';
 import Login from './react/Login';
 
 const store = createStore(reducers, applyMiddleware(logger), applyMiddleware(thunk));
