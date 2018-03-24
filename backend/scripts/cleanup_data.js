@@ -3,26 +3,12 @@ const fs = require('fs');
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
-let db = null;
-
-// mongoose.Promise = global.Promise;
-// mongoose.connect('mongodb://quinns-macbook:8080');
-// mongoose.connection.once('open', () => {
-// 	console.log('Connected to MongoDB!');
-// });
-// mongoose.connection.on('error', err => {
-// 	console.log(err);
-// 	console.log('Oh no! Something Went Wrong!');
-// 	process.exit();
-// });
-
 let cursor = 28001;
 let cursors = [];
 let all_questions = [];
 
 const getItems = cursor => {
   return new Promise((resolve, reject) => {
-    
     request(base_url + 'polls?cursor=' + cursor, (error, response, body) => {
       if (error || body == undefined || body == null) {
         reject(new Error('End of reading input'));
@@ -53,44 +39,36 @@ const getItems = cursor => {
                 let choices = [];
                 let votes = [];
                 for (sample of sample_pop) {
-                 
                   let sample_responses = sample.responses;
 
-                  for(sample_response of sample_responses){
+                  for (sample_response of sample_responses) {
                     var vote = {
                       choice: sample_response.text,
                       count: sample_response.value
-                    }
+                    };
 
-                    if(!choices.includes(vote.choice)){
+                    if (!choices.includes(vote.choice)) {
                       choices.push(vote.choice);
                       votes.push(vote);
-                    }// end if not duplicate choice
-
-                  }// end foreach sample response
-                  
-                }// end foreach sample
+                    } // end if not duplicate choice
+                  } // end foreach sample response
+                } // end foreach sample
 
                 let votable = {
                   description: description,
                   choices: choices
                 };
 
-                
-                
                 //console.log(votes);
                 //console.log(votable);
-              }// end if we have a question
-
+              } // end if we have a question
             } // end foreach poll questions
-
           } // end foreach polls
-
-        }// end if we have polls
+        } // end if we have polls
 
         // keep track of all cursors so we don't count dupes
         cursors.push(cursor);
-      }// end if not a dupe cursor
+      } // end if not a dupe cursor
 
       setTimeout(() => {
         resolve(body.next_cursor);
@@ -99,7 +77,7 @@ const getItems = cursor => {
   });
 };
 
-while(cursor > 1) {
+while (cursor > 1) {
   getItems(cursor).catch(error => {
     console.log(error);
     process.exit();
