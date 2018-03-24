@@ -42,14 +42,20 @@ app.post('/login', (req, res) => {
 /** END Authentication handlers **/
 
 app.all('/*', (req, res) => {
-  if (req.path !== '/login' && (app.locals.user === undefined || app.locals.user === null)) {
-    res.redirect('/login');
-    return;
-  }
+  // if (req.path !== '/login' && (app.locals.user === undefined || app.locals.user === null) ) {
+  // 	res.redirect('/login');
+  // 	return;
+  // }
 
   res.render('index', {
+    // appData: JSON.stringify({
+    //   user: app.locals.user
+    // })
     appData: JSON.stringify({
-      user: app.locals.user
+      user: {
+        name: 'Annie',
+        is_citizen: true
+      }
     })
   });
 });
