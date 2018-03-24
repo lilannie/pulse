@@ -3,7 +3,7 @@ const fs = require('fs');
 //TODO
 const solc = require('solc');
 
-module.exports = (web3, addressList) => {
+module.exports = (web3, contractAddressList) => {
 	var obj = {};
 
 	obj.getCount = () => {
@@ -24,7 +24,7 @@ module.exports = (web3, addressList) => {
 
 				//count
 				//this is just for basic functionality
-				web3.eth.defaultAccount = addressList[0];
+				web3.eth.defaultAccount = contractAddressList[0];
 				result = contractInstance.totalVotesFor.call('Rama').toLocaleString();
 				return resolve({value: result});
 

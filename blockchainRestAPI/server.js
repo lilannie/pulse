@@ -1,5 +1,9 @@
 //database stuff
-var addressList = [];
+contractAddressList = [];
+userCount = 1; //skips the 0 index because we create contracts from that account
+record = {};
+userHistory = [];
+
 
 //web server stuff
 const express = require('express');
@@ -16,7 +20,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 //routes
-require('./routes/index')(app, web3, addressList);
+require('./routes/index')(app, web3, contractAddressList, userCount, userHistory);
 
 //start server
 app.listen(serverPort, () => {
