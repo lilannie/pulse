@@ -11,7 +11,3 @@ exports.connect = () => {
     process.exit();
   });
 };
-
-exports.close = () => {
-  mongoose.disconnect();
-};
