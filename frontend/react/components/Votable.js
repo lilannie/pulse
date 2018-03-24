@@ -65,4 +65,5 @@ Votable.PropTypes = {
 	title: PropTypes.string.isRequired,
 
 };
+
 export default Votable;

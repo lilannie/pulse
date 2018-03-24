@@ -3,9 +3,25 @@ import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 
 import { Card } from './Card.js';
-import { Tasks } from './Tasks/Tasks.js';
 
 class Post extends Component {
+	constructor(props) {
+		super(props);
+
+		this.renderComments = this.renderComments.bind(this);
+	}
+
+	renderComments() {
+		return this.props.comments.map((comments, key) => {
+			return (
+				<tr key={key}>
+					<td>
+
+					</td>
+				</tr>
+			);
+		});
+	}
 
 	render() {
 		return (
@@ -23,7 +39,7 @@ class Post extends Component {
 							<div className="table-full-width">
 								<table className="table">
 									<tbody>
-									{ this.renderChoices() }
+									{ this.renderComments() }
 									</tbody>
 								</table>
 							</div>
@@ -34,5 +50,19 @@ class Post extends Component {
 		);
 	}
 }
+
+Post.PropTypes = {
+	_id: PropTypes.number.isRequired,
+	content: PropTypes.string.isRequired,
+	rank: PropTypes.number.isRequired,
+	date_created: PropTypes.string.isRequired,
+	location: PropTypes.object.isRequired,
+	comments: PropTypes.shape({
+		_id: PropTypes.number.isRequired,
+		content: PropTypes.string.isRequired,
+		rank: PropTypes.number.isRequired,
+		date_created: PropTypes.string.isRequired,
+	})
+};
 
 export default Post;
