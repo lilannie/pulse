@@ -63,3 +63,5 @@ typings/
 public/bundle.js
 
 .directory
+
+package-lock.json
