@@ -1,6 +1,14 @@
 import { combineReducers } from 'redux';
 
 import {
+	save_comment
+} from './comment';
+
+import {
+	topic_posts
+} from './post';
+
+import {
 	topics
 } from './topic';
 
@@ -9,18 +17,15 @@ import {
 } from './votable';
 
 import {
-	topic_posts
-} from './post';
-
-import {
 	voter_history,
 	save_vote
 } from './vote';
 
 const reducers = combineReducers({
+	save_comment,
+	topic_posts,
 	topics,
 	topic_votables,
-	topic_posts,
 	voter_history
 });
 

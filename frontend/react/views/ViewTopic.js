@@ -15,6 +15,7 @@ class ViewTopic extends Component {
 
 		this.renderTopicItems = this.renderTopicItems.bind(this);
 		this.handleVoteChange = this.handleVoteChange.bind(this);
+		this.handleSaveComment = this.handleSaveComment.bind(this);
 	}
 
 	componentDidMount() {
@@ -52,7 +53,7 @@ class ViewTopic extends Component {
 		);
 	}
 
-	openCommentForm() {
+	handleSaveComment(params) {
 
 	}
 
@@ -75,7 +76,9 @@ class ViewTopic extends Component {
 					                 handleChange={ this.handleVoteChange }
 					                 { ...item } />);
 				}
-				return (<Post key={ key } { ...item }/>);
+				return (<Post key={ key }
+				              handleSaveComment={ this.handleSaveComment }
+				              { ...item }/>);
 			});
 	}
 
