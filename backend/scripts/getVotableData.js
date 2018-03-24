@@ -87,5 +87,3 @@ getItems(cursor).catch(error => {
   console.log(error);
   process.exit();
 });
-
-db.close();

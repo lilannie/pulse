@@ -71,5 +71,3 @@ const convertChoice = (key, row, choices) => {
   data--;
   return (data > choices.length || data < 0 || isNaN(data)) ? "Don't Know" : choices[data];
 };
-
-db.close();
