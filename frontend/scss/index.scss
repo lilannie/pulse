@@ -1,2 +1,23 @@
 @import 'colors';
 
+.login {
+	margin: auto;
+	width: 50%;
+	padding: 10px;
+	text-align: center;
+
+	button{
+		padding: 20px;
+		margin-top: 20px;
+		font-size: 25px;
+	}
+}
+
+.logo {
+	padding-bottom: 20px;
+
+	.logo-normal {
+		padding-top: 15px;
+	}
+}
+

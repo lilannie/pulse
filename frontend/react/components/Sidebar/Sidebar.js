@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom';
 
 import HeaderLinks from '../Header/HeaderLinks.js';
 
-const imagine = 'img/sidebar-3.jpg';
-const logo = 'img/reactlogo.png';
+const city = 'img/sidebar-5.jpg';
+const logo = 'img/capitol.png';
 
 import appRoutes from '../../routes/app.js';
 
@@ -27,20 +27,20 @@ class Sidebar extends Component{
     }
     render(){
         const sidebarBackground = {
-            backgroundImage: 'url(' + imagine + ')'
+            backgroundImage: 'url(' + city + ')'
         };
         return (
-            <div id="sidebar" className="sidebar" data-color="black" data-image={imagine}>
-                <div className="sidebar-background" style={sidebarBackground}></div>
-                    <div className="logo">
-                        <a href="https://www.creative-tim.com" className="simple-text logo-mini">
+            <div id="sidebar" className="sidebar" data-color="black" data-image={ city }>
+                <div className="sidebar-background" style={ sidebarBackground }></div>
+                    <div className="logo" style={{ paddingBottom: '20px' }}>
+                        <a href="/" className="simple-text logo-mini">
                             <div className="logo-img">
-                                <img src={logo} alt="logo_image"/>
+                                <img src={ logo } alt="logo_image"/>
                             </div>
 
                         </a>
-                        <a href="https://www.creative-tim.com" className="simple-text logo-normal">
-                            Creative Tim
+                        <a href="/" className="simple-text logo-normal" style={{ paddingTop: '20px' }}>
+                            Pulse
                         </a>
                     </div>
                 <div className="sidebar-wrapper">
@@ -50,10 +50,10 @@ class Sidebar extends Component{
                             appRoutes.map((prop,key) => {
                                 if(!prop.redirect)
                                     return (
-                                        <li className={prop.upgrade ? "active active-pro":this.activeRoute(prop.path)} key={key}>
-                                            <NavLink to={prop.path} className="nav-link" activeClassName="active">
-                                                <i className={prop.icon}></i>
-                                                <p>{prop.name}</p>
+                                        <li className={ prop.upgrade ? "active active-pro":this.activeRoute(prop.path) } key={ key }>
+                                            <NavLink to={ prop.path } className="nav-link" activeClassName="active">
+                                                <i className={ prop.icon }></i>
+                                                <p>{ prop.name }</p>
                                             </NavLink>
                                         </li>
                                     );

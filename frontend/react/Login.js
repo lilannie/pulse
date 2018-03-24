@@ -7,15 +7,13 @@ export default class App extends Component {
 
 	render() {
 		return (
-			<div className="login">
-				<h2>Sign In</h2>
-				<form action="/login" method="post" >
-					<label htmlFor="university_id">University ID  </label>
-					<input id="university_id" type="text" name="university_id"/>
-					<br/>
-					<button className="form-buttons" type="submit">Sign In</button>
-				</form>
-			</div>
+			<form className="login" action="/login" method="post" >
+				User Type
+				<br/>
+				<input id="user_type" type="text" name="user_type"/>
+				<br/>
+				<button type="submit">Sign In</button>
+			</form>
 		);
 	}
 }
