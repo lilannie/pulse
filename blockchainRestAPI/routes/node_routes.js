@@ -8,7 +8,7 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 	//general info of blockchain
 	app.get('/', (req, res) => {
 		var status = general.getStatus();
-		res.send({ 
+		res.send({
 			data: status
 		})
 	});
