@@ -4,8 +4,9 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 	const vote = require('../scripts/vote')(web3, contractAddressList, userHistory);
 	const getCount = require('../scripts/getCount')(web3, contractAddressList);
 	const history = require('../scripts/getVoterHistory')(web3, contractAddressList);
+	const update = require('../scripts/updateVote')(web3, contractAddressList, userHistory);
 
-	//general info of blockchain
+	//general info of the live blockchain
 	app.get('/', (req, res) => {
 		var status = general.getStatus();
 		res.send({ 
@@ -36,6 +37,19 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 		.catch(error => {});
 	});
 
+	//change vote on specified contract. Returns false if invalid response
+	//or if the address hasn't voted before 
+	app.put('/contract/vote/update', (req, res) => {
+		vote.vote(req.body.contractAddress, req.body.voterAddress, req.body.response)
+		.then(result => {
+			res.send({
+				data: result
+			});
+		})
+		.catch(error => {});
+	});
+
+	//returns assigned voter address
 	app.get('/create/user', (req, res) => {
 		userAddress = web3.eth.accounts[userCount];
 		userCount++;
@@ -64,12 +78,15 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 		});
 	});
 
+	//returns amount of registered voters
 	app.get('/users/count', (req, res) => {
 		res.send({
 			BCRegisteredVoters: (userCount - 1)
 		})
 	});
 
+	//returns returns two coorelated arrays. 
+	//A contract address array and an array containing the responses
 	app.get('/user/history/:address', (req, res) => {
 		//gets index of user history
 		index = 0;
@@ -80,7 +97,6 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 		}
 		res.send({
 			History: (userHistory[index])
-
 		})
 	});
 
