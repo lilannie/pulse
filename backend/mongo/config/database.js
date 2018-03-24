@@ -3,7 +3,7 @@ mongoose.Promise = global.Promise;
 
 exports.connect = () => {
   return new Promise((resolve, reject) => {
-    mongoose.connect('mongodb://localhost/hackathon').then(() => {
+    mongoose.connect('mongodb://localhost:27017/hackathon').then(() => {
       console.log(mongoose.connection.readyState);
       return resolve(mongoose.connection.readyState);
     });
