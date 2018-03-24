@@ -55,7 +55,8 @@
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
     "solc": "^0.4.21",
-    "web3": "^1.0.0-beta.33"
+    "web3": "^1.0.0-beta.33",
+    "web3-net": "^1.0.0-beta.33"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
