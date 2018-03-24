@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 
 const Votable = new mongoose.Schema({
+  // contract_id: Number,
+  // creator_id: Number,
+  // title: String,
   description: String,
-  choices: Array
+  choices: [String]
 });
 
 // Create a Votable Model and Export It

@@ -1,6 +1,6 @@
 const request = require('request');
-const mongoose = require('mongoose');
 const fs = require('fs');
+const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
@@ -60,8 +60,9 @@ const getItems = cursor => {
                   choices: choices
                 };
 
-                //console.log(votes);
-                console.log(votable);
+                // console.log(votes);
+                // console.log(votable);
+                votable_ctrl.insert(votable);
               } // end if we have a question
             } // end foreach poll questions
           } // end foreach polls
@@ -78,10 +79,7 @@ const getItems = cursor => {
   });
 };
 
-// while (cursor > 1) {
 getItems(cursor).catch(error => {
   console.log(error);
   process.exit();
 });
-cursor -= 15;
-// }

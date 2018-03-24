@@ -1,12 +1,15 @@
-const Votable = require('../models/votable');
+const Votable = require('../models/votable_model');
 
-exports.findAll = (req, res) => {
-  Votable.find((err, results) => {
+exports.insert = legislature => {
+  let votable = new Votable({
+    description: legislature.description,
+    choices: legislature.choices
+  });
+
+  votable.save((err, result) => {
     if (err) {
-      console.err('Oh no! Something Went Wrong!');
-      res.status(500).send('Unable to retrieve Votables!');
-    } else {
-      res.send(results);
+      console.log(err.stack);
     }
+    console.log(result);
   });
 };
