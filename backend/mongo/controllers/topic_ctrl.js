@@ -1,38 +1,14 @@
+const Topic = require('../models/topic_model');
+
 exports.getAllTopics = () => {
-  //   return [
-  //     {
-  //       _id: 1,
-  //       title: 'Gun Control'
-  //     },
-  //     {
-  //       _id: 2,
-  //       title: 'Trump'
-  //     },
-  //     {
-  //       _id: 3,
-  //       title: 'Trade War'
-  //     },
-  //     {
-  //       _id: 4,
-  //       title: 'Immigration'
-  //     },
-  //     {
-  //       _id: 5,
-  //       title: 'Taxes'
-  //     },
-  //     {
-  //       _id: 6,
-  //       title: 'Russian Hacking'
-  //     },
-  //     {
-  //       _id: 7,
-  //       title: 'Facebook Data'
-  //     },
-  //     {
-  //       _id: 8,
-  //       title: 'Taxes'
+  //   Topic.find((err, results) => {
+  //     if (err) {
+  //       console.err('Oh no! Something Went Wrong!');
+  //       console.log(err.stack);
+  //     } else {
+  //       console.log(results);
   //     }
-  //   ];
+  //   });
 };
 
 exports.getTopicPosts = topicID => {
