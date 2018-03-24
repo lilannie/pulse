@@ -2,14 +2,11 @@
   "name": "pulse",
   "version": "1.0.0",
   "description": "A social application to connect citizens with elected representatives.",
-  "main": "index.js",
   "scripts": {
     "build": "./node_modules/.bin/webpack --config ./webpack.config.js",
     "build-dev": "NODE_ENV=development ./node_modules/.bin/webpack --config ./webpack.config.js -w",
-    "server": "NODE_ENV=prod node ./backend/server.js",
-    "server-dev": "NODE_ENV=development nodemon ./backend/server.js",
-    "windows-server": "set NODE_ENV=development && nodemon ./backend/server.js",
-    "windows-server-dev": "set NODE_ENV=development && nodemon ./backend/server.js"
+    "server": "NODE_ENV=prod node server.js",
+    "server-dev": "NODE_ENV=development nodemon server.js"
   },
   "keywords": [
     "Social",
