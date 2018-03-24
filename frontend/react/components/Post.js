@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 
 import { Card } from './Card.js';
@@ -10,15 +11,22 @@ class Post extends Component {
 		return (
 			<Col md={4}>
 				<Card
-					title="Tasks"
+					title={ this.props.content }
 					category="Backend development"
 					stats="Updated 3 minutes ago"
 					statsIcon="fa fa-history"
 					content={
-						<div className="table-full-width">
-							<table className="table">
-								<Tasks />
-							</table>
+						<div className="votable">
+							<div className="description">
+								{ description }
+							</div>
+							<div className="table-full-width">
+								<table className="table">
+									<tbody>
+									{ this.renderChoices() }
+									</tbody>
+								</table>
+							</div>
 						</div>
 					}
 				/>
