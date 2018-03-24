@@ -83,7 +83,7 @@ const get_topic_posts = params => {
 					}
 				]
 			}
-		])
+		]);
 	});
 };
 

@@ -35,7 +35,7 @@ const get_topics = () => {
 				_id: 8,
 				title: 'Taxes'
 			}
-		])
+		]);
 	});
 };
 

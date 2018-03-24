@@ -58,7 +58,7 @@ const get_topic_votables = params => {
 				choices: ['Agree', 'Disagree', 'Neutral'],
 				rank: 5
 			}
-		])
+		]);
 	});
 };
 
