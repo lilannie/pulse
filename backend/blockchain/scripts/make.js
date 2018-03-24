@@ -3,12 +3,12 @@ const fs = require('fs');
 //TODO
 const solc = require('solc');
 
-module.exports = (web3, addressList) => {
+module.exports = (web3, contractAddressList) => {
 	var obj = {};
 
 	obj.createContract = (itemID, responses) => {
 		return new Promise(async (resolve, reject) => {
-			var result;
+			var result = {};
 
 			try {
 				var code = fs.readFileSync('Voting.sol').toString();
@@ -21,9 +21,10 @@ module.exports = (web3, addressList) => {
 
 				while(true){
 					if(deployedContract.address){
-						result = deployedContract.address;
-						addressList.push(deployedContract.address);
-						return resolve({ minedAddress: result});
+						result.address = deployedContract.address;
+						result.abi = abiDefinition;
+						contractAddressList.push(result);
+						return resolve({ minedAddress: result.address});
 					}
 					await sleep(1000);
 				}

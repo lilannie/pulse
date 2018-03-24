@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Citizen = new mongoose.Schema({
   blockchainID: Number,
   demographicInfo: {
-    age: Number,
+    age: String,
     gender: String,
     race: String,
     religion: String,

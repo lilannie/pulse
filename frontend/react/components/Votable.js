@@ -25,7 +25,7 @@ class Votable extends Component {
 				<tr key={key}>
 					<td>
 						<CustomRadio
-							number={ key }
+							number={ `${key}-${_contract_id}` }
 							option={ choice }
 							name={ _contract_id }
 							onChange={ handleChange.bind(null, {
@@ -33,9 +33,9 @@ class Votable extends Component {
 								choice
 							}) }
 							checked={  userChoice && userChoice === choice }
+							label={ choice }
 						/>
 					</td>
-					<td>{ choice }</td>
 				</tr>
 			);
 		});
