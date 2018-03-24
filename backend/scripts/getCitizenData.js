@@ -20,7 +20,7 @@ db.connect().then(db => {
 		{key: 'relig', name: 'religion'},
 		{key: 'income'},
 		{key: 'party'},
-		{key: 'citizen', name: 'is_citizen'},
+		{key: 'citizen', name: 'isCitizen'},
 		{key: 'educ2', name: 'educationLevel'},
 		{key: 'ideo', name: 'ideology'}
 	];
@@ -42,7 +42,6 @@ db.connect().then(db => {
 		return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
 	};
   
-  // let citizens = [];
 	csv()
 		.fromFile(input_path)
 		.on('json', row => {

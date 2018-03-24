@@ -13,7 +13,7 @@ const Citizen = new mongoose.Schema({
     party: String,
     ideology: String,
     educationLevel: String,
-    is_citizen: String
+    isCitizen: String
   }
 });
 
