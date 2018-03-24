@@ -54,6 +54,7 @@
     "redux-act-async": "^1.7.0",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
+    "request-promise": "^4.2.2",
     "solc": "^0.4.21",
     "web3": "^1.0.0-beta.33"
   },
