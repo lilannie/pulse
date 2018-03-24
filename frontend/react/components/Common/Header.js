@@ -35,7 +35,7 @@ class Header extends Component{
     getBrand(){
 	    if (this.props.location.pathname === '/topics') return 'Topics';
 
-	    if(new RegExp('(/topic/)\\d+(/view)').test(this.props.location.pathname)) return 'Topic Posts';
+	    if(new RegExp('(/topic/)\\d+(/view)').test(this.props.location.pathname)) return 'Topic Votables and Posts';
     }
 
     render(){

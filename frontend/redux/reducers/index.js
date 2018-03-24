@@ -9,6 +9,7 @@ import {
 } from './post';
 
 import {
+	topic,
 	topics
 } from './topic';
 
@@ -24,9 +25,11 @@ import {
 const reducers = combineReducers({
 	save_comment,
 	topic_posts,
+	topic,
 	topics,
 	topic_votables,
-	voter_history
+	voter_history,
+	save_vote
 });
 
 export default reducers;

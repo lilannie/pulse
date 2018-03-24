@@ -20,18 +20,23 @@ class ViewTopic extends Component {
 
 	componentDidMount() {
 		const {
+			dispatchGetTopic,
 			dispatchGetPosts,
 			dispatchGetVotables,
 			dispatchGetVoterHistory,
 			match
 		} = this.props;
 
-		dispatchGetPosts({
+		const topicParam = {
 			topic_id: match.params.id
-		});
-		dispatchGetVotables({
-			topic_id: match.params.id
-		});
+		};
+
+		dispatchGetTopic(topicParam);
+
+		dispatchGetPosts(topicParam);
+
+		dispatchGetVotables(topicParam);
+
 		dispatchGetVoterHistory({
 			user_blockchain_id: this.context.user.id
 		});
@@ -101,6 +106,7 @@ class ViewTopic extends Component {
 
 		return (
 			<div className="content">
+				<h2>{ this.props.topic.title }</h2>
 				<Grid fluid>
 					<Row>
 						{ this.renderTopicItems() }
@@ -112,10 +118,12 @@ class ViewTopic extends Component {
 }
 
 ViewTopic.PropTypes = {
-	votables: PropTypes.array.isRequired,
+	topic: PropTypes.object.isRequired,
 	posts: PropTypes.array.isRequired,
-	voterHistory: PropTypes.object.isRequired,
+	votables: PropTypes.array.isRequired,
+	history: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
+	dispatchGetTopic: PropTypes.func.isRequired,
 	dispatchGetPosts: PropTypes.func.isRequired,
 	dispatchGetVotables: PropTypes.func.isRequired,
 	dispatchGetVoterHistory: PropTypes.func.isRequired,
