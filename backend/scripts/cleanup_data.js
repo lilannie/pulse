@@ -22,7 +22,6 @@ const getItems = cursor => {
       }
 
       if (!cursors.includes(cursor)) {
-        //console.log(body.next_cursor);
         let polls = body.items;
 
         if (polls) {
@@ -36,17 +35,8 @@ const getItems = cursor => {
               let sample_pop = item.sample_subpopulations;
 
               if (description && !all_questions.includes(description)) {
-                // console.log(question);
 
-                //let id = 5;
-                let votable = {
-                  //id: 5,
-                  description: description,
-                  responses: responses.map(response => response.name)
-                };
-
-
-
+                let choices = [];
                 for (sample of sample_pop) {
                  
                   let sample_responses = sample.responses;
@@ -56,22 +46,35 @@ const getItems = cursor => {
                       choice: sample_response.text,
                       count: sample_response.value
                     }
-                    console.log(vote);
-                  }
-                  
 
+                    if(!choices.includes(vote.choice)){
+                      choices.push(vote.choice);
+                      console.log(vote);
+                    }// end if not duplicate choice
+
+                  }// end foreach sample response
                   
-                }
+                }// end foreach sample
+
+                let votable = {
+                  //id: 5,
+                  description: description,
+                  choices: choices
+                };
 
                 console.log(votable);
-              }
+
+              }// end if we have a question
+
             } // end foreach poll questions
+
           } // end foreach polls
-        }
+
+        }// end if we have polls
 
         // keep track of all cursors so we don't count dupes
         cursors.push(cursor);
-      }
+      }// end if not a dupe cursor
 
       setTimeout(() => {
         resolve(body.next_cursor);
