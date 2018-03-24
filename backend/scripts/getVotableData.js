@@ -1,17 +1,18 @@
 const request = require('request');
+const mongoose = require('mongoose');
 const fs = require('fs');
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
-let cursor = 28001;
+let cursor = 25000;
 let cursors = [];
 let all_questions = [];
 
 const getItems = cursor => {
   return new Promise((resolve, reject) => {
     request(base_url + 'polls?cursor=' + cursor, (error, response, body) => {
-      if (error || body == undefined || body == null) {
-        reject(new Error('End of reading input'));
+      if (error || body === undefined || body === null) {
+        return reject(new Error('End of reading input'));
       }
 
       try {
@@ -60,7 +61,7 @@ const getItems = cursor => {
                 };
 
                 //console.log(votes);
-                //console.log(votable);
+                console.log(votable);
               } // end if we have a question
             } // end foreach poll questions
           } // end foreach polls
@@ -77,10 +78,10 @@ const getItems = cursor => {
   });
 };
 
-while (cursor > 1) {
-  getItems(cursor).catch(error => {
-    console.log(error);
-    process.exit();
-  });
-  cursor -= 15;
-}
+// while (cursor > 1) {
+getItems(cursor).catch(error => {
+  console.log(error);
+  process.exit();
+});
+cursor -= 15;
+// }
