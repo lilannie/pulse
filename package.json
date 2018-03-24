@@ -37,6 +37,7 @@
     "classnames": "^2.2.5",
     "ejs": "^2.5.7",
     "express": "^4.16.3",
+    "ganache-cli": "^6.1.0",
     "google-maps-react": "^1.1.6",
     "mongoose": "^5.0.11",
     "morgan": "^1.9.0",
@@ -52,7 +53,9 @@
     "redux": "^3.7.2",
     "redux-act-async": "^1.7.0",
     "redux-form": "^7.3.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "solc": "^0.4.21",
+    "web3": "^1.0.0-beta.33"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
