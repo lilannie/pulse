@@ -6,6 +6,7 @@ const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 
 db.connect().then(() => {
+
   const votables = votable_data.votables;
   const input_path = 'citizen.csv';
   const demographics = [
@@ -21,17 +22,11 @@ db.connect().then(() => {
     'educ2',
     'ideo'
   ];
-
-  for (votable of votables) {
-    let col = votable.col;
-    delete votable.col;
-
-    //console.log(votable);
-    /* Insert votable into Mongo */
-    votable_ctrl.insert(votable);
-    votable.col = col;
-  } // end foreach votable
-
+  
+  setTimeout(() => {
+    db.collection.insertMany(votables);
+  }, 5000)
+  
   /* Return/select all votables in order to obtain votable ID for votes */
 
   csv()
@@ -48,7 +43,7 @@ db.connect().then(() => {
       } // end foreach prop
 
       /* TODO: Insert Citizen into MongoDB 
-     get citizen_id as return value and use for vote */
+      get citizen_id as return value and use for vote */
       // console.log(citizen_data);
 
       for (votable of votables) {
@@ -77,4 +72,7 @@ db.connect().then(() => {
     data--;
     return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
   };
+
 });
+
+
