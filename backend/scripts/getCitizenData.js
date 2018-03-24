@@ -1,5 +1,6 @@
 const csv = require('csvtojson');
 const labels = require('./conversions');
+const mongoose = require('mongoose');
 const votable_data = require('./votables');
 const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
