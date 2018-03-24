@@ -7,7 +7,7 @@ import {
 import NotificationSystem from 'react-notification-system';
 import PropTypes from 'prop-types';
 
-import '../../assets/sass/light-bootstrap-dashboard.css';
+import '../../assets/sass/light-bootstrap-dashboard.scss';
 import '../../scss/index.scss';
 
 import Header from '../components/Header/Header';
