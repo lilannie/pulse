@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 
 import { Card } from './Card.js';
-import { RadioButton } from '../elements/CustomRadio/CustomRadio';
+import CustomRadio  from '../elements/CustomRadio/CustomRadio';
 
 class Votable extends Component {
 	constructor(props) {
@@ -14,13 +14,14 @@ class Votable extends Component {
 
 	renderChoices() {
 		return this.props.choices.map((choice, key) => {
+
 			return (
 				<tr key={key}>
 					<td>
-						<RadioButton
+						<CustomRadio
 							number={ key }
 							option={ choice }
-							name={ this._contract_id }
+							name={ this.props._contract_id }
 						/>
 					</td>
 					<td>{ choice }</td>
@@ -40,7 +41,7 @@ class Votable extends Component {
 				<Card
 					statsIcon="fa fa-history"
 					title={ title }
-					stats="Updated 3 minutes ago"
+					stats="Saved 3 minutes ago"
 					content={
 						<div className="votable">
 							<div className="description">
@@ -48,9 +49,9 @@ class Votable extends Component {
 							</div>
 							<div className="table-full-width">
 								<table className="table">
-								<tbody>
-									{ this.renderChoices() }
-								</tbody>
+									<tbody>
+										{ this.renderChoices() }
+									</tbody>
 								</table>
 							</div>
 						</div>
