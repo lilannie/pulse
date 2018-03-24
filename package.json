@@ -34,6 +34,7 @@
     "classnames": "^2.2.5",
     "csv-parse": "^2.0.4",
     "csvtojson": "^1.1.9",
+    "compromise": "^11.5.3",
     "ejs": "^2.5.7",
     "express": "^4.16.3",
     "ganache-cli": "^6.1.0",
@@ -53,6 +54,7 @@
     "redux-act-async": "^1.7.0",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
+    "request-promise": "^4.2.2",
     "solc": "^0.4.21",
     "web3": "^1.0.0-beta.33"
   },

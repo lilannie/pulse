@@ -12,11 +12,15 @@ class Post extends Component {
 	}
 
 	renderComments() {
-		return this.props.comments.map((comments, key) => {
+		return this.props.comments
+			.sort((item1, item2) => {
+				return item2.rank - item1.rank;
+			})
+			.map((comment, key) => {
 			return (
 				<tr key={key}>
 					<td>
-
+						{ comment.content }
 					</td>
 				</tr>
 			);
@@ -24,6 +28,10 @@ class Post extends Component {
 	}
 
 	render() {
+		const {
+			description
+		} = this.props;
+
 		return (
 			<Col md={4}>
 				<Card
