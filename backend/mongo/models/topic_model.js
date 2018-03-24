@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Topic = new mongoose.Schema({
-  ID: Number,
+  _custom_id: Number,
   title: String
 });
 
