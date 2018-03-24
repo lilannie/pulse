@@ -1,9 +1,9 @@
-let request = require('request');
-var fs = require('fs');
+const request = require('request');
+const fs = require('fs');
 
-let base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
+const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
+const cursor = 28001;
 
-let cursor = 28001;
 let cursors = [];
 let all_questions = [];
 
