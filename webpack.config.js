@@ -17,6 +17,7 @@ module.exports = {
   output: {
     path: paths.build,
     filename: paths.output,
+	  publicPath: './public'
   },
   resolve: {
     alias: {

@@ -48,6 +48,8 @@ app.all('/*', (req, res) => {
 	// 	return;
 	// }
 
+	console.log(req.path);
+
   res.render('index', {
     // appData: JSON.stringify({
     //   user: app.locals.user

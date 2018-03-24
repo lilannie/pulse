@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
 
-import HeaderLinks from '../Header/HeaderLinks.js';
+import HeaderLinks from './HeaderLinks.js';
 
-const city = 'img/sidebar-5.jpg';
-const logo = 'img/capitol.png';
-
-import appRoutes from '../../routes/app.js';
+import appRoutes from '../../util/routes.js';
+import { paddingBottom, paddingTop } from '../../util/style';
 
 class Sidebar extends Component{
     constructor(props){
@@ -27,19 +25,19 @@ class Sidebar extends Component{
     }
     render(){
         const sidebarBackground = {
-            backgroundImage: 'url(' + city + ')'
+            backgroundImage: 'url( /img/sidebar-5.jpg )'
         };
         return (
-            <div id="sidebar" className="sidebar" data-color="black" data-image={ city }>
+            <div id="sidebar" className="sidebar" data-color="black" data-image={ '/img/sidebar-5.jpg' }>
                 <div className="sidebar-background" style={ sidebarBackground }></div>
-                    <div className="logo" style={{ paddingBottom: '20px' }}>
+                    <div className="logo" style={ paddingBottom(20) }>
                         <a href="/" className="simple-text logo-mini">
                             <div className="logo-img">
-                                <img src={ logo } alt="logo_image"/>
+                                <img src={ '/img/capitol.png' } alt="logo_image"/>
                             </div>
 
                         </a>
-                        <a href="/" className="simple-text logo-normal" style={{ paddingTop: '20px' }}>
+                        <a href="/" className="simple-text logo-normal" style={ paddingTop(20) }>
                             Pulse
                         </a>
                     </div>
@@ -48,7 +46,7 @@ class Sidebar extends Component{
                         { this.state.width <= 991 ? (<HeaderLinks />):null }
                         {
                             appRoutes.map((prop,key) => {
-                                if(!prop.redirect)
+                                if (!prop.redirect && prop.name !== 'Topic')
                                     return (
                                         <li className={ prop.upgrade ? "active active-pro":this.activeRoute(prop.path) } key={ key }>
                                             <NavLink to={ prop.path } className="nav-link" activeClassName="active">

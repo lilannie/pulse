@@ -3,7 +3,7 @@ import { Navbar } from 'react-bootstrap';
 
 import HeaderLinks from './HeaderLinks.js';
 
-import appRoutes from '../../routes/app.js';
+import appRoutes from '../../util/routes.js';
 
 class Header extends Component{
     constructor(props){
@@ -60,9 +60,9 @@ class Header extends Component{
             <Navbar fluid>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#pablo">{this.getBrand()}</a>
+                        { this.getBrand() }
                     </Navbar.Brand>
-                    <Navbar.Toggle onClick={this.mobileSidebarToggle}/>
+                    <Navbar.Toggle onClick={ this.mobileSidebarToggle }/>
                 </Navbar.Header>
                 <Navbar.Collapse>
                     <HeaderLinks />
