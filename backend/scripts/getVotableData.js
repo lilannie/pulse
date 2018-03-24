@@ -1,4 +1,5 @@
 const request = require('request-promise');
+const nlp = require('compromise');
 const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 
@@ -9,6 +10,7 @@ const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 let cursor = 25000;
 let cursors = [];
 let all_questions = [];
+let descriptions = [];
 
 const getVotables = async cursor => {
   let results = await request(`${base_url}polls?cursor=${cursor}`);
@@ -56,9 +58,11 @@ getVotables(cursor).then(json => {
               choices: choices
             };
 
+            descriptions.push(votable.description);
+
             // console.log(votes);
             // console.log(votable);
-            votable_ctrl.insert(votable);
+            // votable_ctrl.insert(votable);
           } // end if we have a question
         } // end foreach poll questions
       } // end foreach polls
@@ -67,4 +71,15 @@ getVotables(cursor).then(json => {
     // keep track of all cursors so we don't count dupes
     cursors.push(cursor);
   } // end if not a dupe cursor
+
+  // Use nlp to categorize questions and generate a list of topics
+  processText(descriptions);
 });
+
+const processText = descriptions => {
+  for (let i = 0; i < descriptions.length; i++) {
+    nlp(descriptions[i].text)
+      .topics()
+      .out();
+  }
+};
