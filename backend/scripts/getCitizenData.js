@@ -7,9 +7,9 @@ const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 const Votable = require('../mongo/models/citizen_model');
 
 db.connect().then(db => {
-	console.log('Connected');
 
-	const votables = votable_data.votables;
+  let temp_votables = votable_data.votables;
+  let votables = votable_data.votables;
 	const input_path = 'citizen.csv';
 	const demographics = [
 		{ key: 'age', no_convert: true },
@@ -27,11 +27,9 @@ db.connect().then(db => {
 
   /* Insert votables */
 	db.model('Votable').insertMany(votables, (error, doc) => {
-		//console.log(error, doc);
+    votables = doc;
 	});
 
-	/* Return/select all votables in order to obtain votable ID for votes */
-  
   const convertDemographic = (key, row) => {
 		let data = row[key];
 		data--;
@@ -64,28 +62,30 @@ db.connect().then(db => {
 				} else {
 					citizen_data.demographicInfo[real_name] = convertDemographic(prop.key, row);
 				} // end if dont convert
-			} // end foreach prop
+      } // end foreach prop
       
-      db.model('Citizen').create(citizen_data).then(result => {
-        console.log(result);
-      });
-  
-      // VOTES 
+      /* Create a citizen */
+      db.model('Citizen').create(citizen_data).then(citizen => {
+        /* Handle votes for a citizen */
+        let citizen_id = citizen._id;
+
+        for(let i = 0; i < votables.length; i++) {
+          let votable = votables[i];
+          let choices = votable.choices;
+          let choice = convertChoice(temp_votables[i].col, row, choices);
+          let votable_id = votable._id;
     
-			for (votable of votables) {
-				let choices = votable.choices;
-				let choice = convertChoice(votable.col, row, choices);
-	
-				/* TODO: Store vote in Blockchain???? */
-				let vote = {
-					citizen_id: 0,
-					votable_id: 0,
-					choice: choice
-				};
-				//console.log(vote);
-			} // end for loop over votables
-     
-    });	
+          /* Store vote in Blockchain */
+          let vote = {
+            citizen_id: citizen_id,
+            votable_id: votable_id,
+            choice: choice
+          };
+          
+          console.log(vote);
+        } // end for loop over votables
+    });
+  });	
 });
 
 
