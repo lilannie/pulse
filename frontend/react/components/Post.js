@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Col } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 
 import { Card } from './Card.js';
 import { tableBorder } from '../util/style';
@@ -37,8 +37,9 @@ class Post extends Component {
 			<Col md={4}>
 				<Card
 					title={ this.props.content }
-					stats="Updated 3 minutes ago"
-					statsIcon="fa fa-history"
+					stats={
+						<Button bsStyle="info" block>Add Comment</Button>
+					}
 					content={
 						<div className="votable">
 							<div className="description">

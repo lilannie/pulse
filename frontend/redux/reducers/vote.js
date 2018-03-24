@@ -6,7 +6,7 @@ const get_voter_history = params => {
 			1: 'Agree',
 			2: 'Neutral',
 			3: 'Disagree'
-		})
+		});
 	});
 };
 
@@ -16,12 +16,14 @@ export const get_voter_history_action =
 export const voter_history =
 	createReducerAsync(get_voter_history_action);
 
-const post_save_vote = params => {
+const post_save_vote = (params, callback) => {
 	return new Promise((resolve, reject) => {
 		resolve({
 			status: 'Success',
 			error: null
-		})
+		});
+
+		callback();
 	});
 };
 

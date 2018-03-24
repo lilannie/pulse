@@ -23,8 +23,8 @@ export const mapDispatchToProps = dispatch => {
 		dispatchGetVoterHistory: params => {
 			dispatch(get_voter_history_action(params));
 		},
-		dispatchSaveVote: params => {
-			dispatch(post_save_vote_action(params));
+		dispatchSaveVote: (params, callback) => {
+			dispatch(post_save_vote_action(params, callback));
 		}
 	};
 };

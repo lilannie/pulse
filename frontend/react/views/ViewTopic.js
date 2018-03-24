@@ -37,9 +37,23 @@ class ViewTopic extends Component {
 	}
 
 	handleVoteChange(vote) {
-		this.props.dispatchSaveVote(Object.assign({
-			user_blockchain_id: this.context.user.id
-		}, vote));
+		const {
+			dispatchSaveVote,
+			dispatchGetVoterHistory,
+		} = this.props;
+
+		dispatchSaveVote(
+			Object.assign({
+				user_blockchain_id: this.context.user.id
+			}, vote),
+			dispatchGetVoterHistory.bind(null, {
+				user_blockchain_id: this.context.user.id
+			})
+		);
+	}
+
+	openCommentForm() {
+
 	}
 
 	renderTopicItems() {
