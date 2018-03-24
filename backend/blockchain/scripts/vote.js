@@ -1,33 +1,38 @@
 const fs = require('fs');
-//get rid of this!!! we don't  need to compile every time!
-//TODO
-const solc = require('solc');
-
-module.exports = (web3, addressList) => {
+module.exports = (web3, contractAddressList, userHistory) => {
 	var obj = {};
 
-	obj.vote = () => {
+	obj.vote = (contractAddress, voterAddress, response) => {
 		return new Promise(async (resolve, reject) => {
 			var result;
+			var abiDef;
 
 			try {
-				//Create ABI. Eventually, have this saved locally rather than
-				//compile everytime
-				//TODO
-				code = fs.readFileSync('Voting.sol').toString();
-				compiledCode = solc.compile(code);
-				abiDefinition = JSON.parse(compiledCode.contracts[':Voting'].interface);
-
-				//grab previously deployed contract to play with
-				VotingContract = web3.eth.contract(abiDefinition);
-				contractInstance = VotingContract.at(addressList[0]);
+				//finds abi in list for the vote
+				for (i = 0; i < contractAddressList.length; i++) {
+					if (contractAddress == contractAddressList[i].address) {
+						abiDef = contractAddressList[i].abi;
+					}
+				}
+				VotingContract = web3.eth.contract(abiDef);
+				contractInstance = VotingContract.at(contractAddress);
 
 				//vote!
-				//this is just for basic functionality
-				result = contractInstance.vote.call("lol", {from: web3.eth.accounts[0], gas: 4000000});
-				contractInstance.vote("lol", {from: web3.eth.accounts[0], gas: 4000000});
-				return resolve({value: result});
+				result = contractInstance.vote.call(response, {from: voterAddress, gas: 4000000});
+				contractInstance.vote(response, {from: voterAddress, gas: 4000000});
 
+				//updates user history array
+				//finds userHistory index by address
+				//if vote is legitimatge
+				if (result) {
+					for (i = 0; i < userHistory.length; i++) {
+						if (voterAddress == userHistory[i].voterAddress) {
+							userHistory[i].contracts.push(contractAddress);
+							userHistory[i].responses.push(response);
+						}
+					}
+				}
+				return resolve({value: result});
 			}
 			catch(e){
 				console.log('Error with vote transaction\n');

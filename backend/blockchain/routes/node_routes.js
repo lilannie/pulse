@@ -5,7 +5,7 @@ module.exports = function (app, web3, addressList) {
 	const getCount = require('../scripts/getCount')(web3, addressList);
 
 	//general info of blockchain
-	app.get('/', (req, res) => {
+	app.get('/api/', (req, res) => {
 		var status = general.getStatus();
 		res.send({
 			data: status
@@ -14,7 +14,7 @@ module.exports = function (app, web3, addressList) {
 
 	//compiles and deploys contract on blockchain
 	//returns address of new contract
-	app.post('/contract/create', (req, res) => {
+	app.post('/api/contract/create', (req, res) => {
 		make.createContract(req.body.itemID, req.body.responses)
   		.then(result => {
   			res.send({ 
@@ -25,12 +25,12 @@ module.exports = function (app, web3, addressList) {
 	});
 
 	//gets list of deployed contracts
-	app.get('/contract/addresses', (req, res) => {
+	app.get('/api/contract/addresses', (req, res) => {
 		res.send({ contractAddresses: addressList})
 	});
 
 	//vote on first contract. True if successful. False if not
-	app.get('/contract/vote', (req, res) => {
+	app.get('/api/contract/vote', (req, res) => {
 		vote.vote().then(result => {
 			res.send({
 				data: result
@@ -40,7 +40,7 @@ module.exports = function (app, web3, addressList) {
 	});
 
 	//get vote count
-	app.get('/contract/voteCount', (req, res) => {
+	app.get('/api/contract/voteCount', (req, res) => {
 		getCount.getCount().then(result => {
 			res.send({
 				data: result
