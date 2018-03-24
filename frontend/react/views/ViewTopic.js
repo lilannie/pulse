@@ -14,17 +14,39 @@ class ViewTopic extends Component {
 		super(props);
 
 		this.renderTopicItems = this.renderTopicItems.bind(this);
+		this.handleVoteChange = this.handleVoteChange.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.dispatchGetPosts();
-		this.props.dispatchGetVotables();
+		const {
+			dispatchGetPosts,
+			dispatchGetVotables,
+			dispatchGetVoterHistory,
+			match
+		} = this.props;
+
+		dispatchGetPosts({
+			topic_id: match.params.id
+		});
+		dispatchGetVotables({
+			topic_id: match.params.id
+		});
+		dispatchGetVoterHistory({
+			user_blockchain_id: this.context.user.id
+		});
+	}
+
+	handleVoteChange(vote) {
+		this.props.dispatchSaveVote(Object.assign({
+			user_blockchain_id: this.context.user.id
+		}, vote));
 	}
 
 	renderTopicItems() {
 		const {
 			votables,
-			posts
+			posts,
+			history
 		} = this.props;
 
 		// Sort items in descending order by rank
@@ -34,7 +56,10 @@ class ViewTopic extends Component {
 			})
 			.map((item, key) => {
 				if (item.choices !== undefined) {
-					return (<Votable key={ key } { ...item }/>);
+					return (<Votable key={ key }
+					                 userChoice={ history[item._contract_id] }
+					                 handleChange={ this.handleVoteChange }
+					                 { ...item } />);
 				}
 				return (<Post key={ key } { ...item }/>);
 			});
@@ -60,9 +85,16 @@ class ViewTopic extends Component {
 ViewTopic.PropTypes = {
 	votables: PropTypes.array.isRequired,
 	posts: PropTypes.array.isRequired,
+	voterHistory: PropTypes.object.isRequired,
 	loading: PropTypes.bool.isRequired,
 	dispatchGetPosts: PropTypes.func.isRequired,
-	dispatchGetVotables: PropTypes.func.isRequired
+	dispatchGetVotables: PropTypes.func.isRequired,
+	dispatchGetVoterHistory: PropTypes.func.isRequired,
+	dispatchSaveVote: PropTypes.func.isRequired
+};
+
+ViewTopic.contextTypes = {
+	user: PropTypes.object
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ViewTopic);

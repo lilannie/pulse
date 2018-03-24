@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Col } from 'react-bootstrap';
 
 import { Card } from './Card.js';
+import { tableBorder } from '../util/style';
 
 class Post extends Component {
 	constructor(props) {
@@ -36,7 +37,6 @@ class Post extends Component {
 			<Col md={4}>
 				<Card
 					title={ this.props.content }
-					category="Backend development"
 					stats="Updated 3 minutes ago"
 					statsIcon="fa fa-history"
 					content={
@@ -45,7 +45,7 @@ class Post extends Component {
 								{ description }
 							</div>
 							<div className="table-full-width">
-								<table className="table">
+								<table className="table" style={ tableBorder }>
 									<tbody>
 									{ this.renderComments() }
 									</tbody>

@@ -14,14 +14,14 @@ app.use(express.static(path.resolve('public')));
 app.set('view engine', 'ejs');
 
 /** BEGIN MongoDB **/
-db.connect();
+// db.connect();
 /** END MongoDB **/
 
 /** BEGIN Authentication handlers **/
 
 app.get('/logout', (req, res) => {
   app.locals.user = null;
-  res.redirect('/');
+  res.redirect('/login');
 });
 
 app.post('/login', (req, res) => {
@@ -43,9 +43,10 @@ app.all('/*', (req, res) => {
     // appData: JSON.stringify({
     //   user: app.locals.user
     // })
+
     appData: JSON.stringify({
       user: {
-        name: 'Annie',
+        id: '1234567',
         is_citizen: true
       }
     })
