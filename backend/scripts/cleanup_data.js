@@ -2,8 +2,8 @@ const request = require('request');
 const fs = require('fs');
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
-const cursor = 28001;
 
+let cursor = 28001;
 let cursors = [];
 let all_questions = [];
 
@@ -45,8 +45,22 @@ const getItems = cursor => {
                   responses: responses.map(response => response.name)
                 };
 
+
+
                 for (sample of sample_pop) {
-                  console.log(sample);
+                 
+                  let sample_responses = sample.responses;
+
+                  for(sample_response of sample_responses){
+                    var vote = {
+                      choice: sample_response.text,
+                      count: sample_response.value
+                    }
+                    console.log(vote);
+                  }
+                  
+
+                  
                 }
 
                 console.log(votable);
