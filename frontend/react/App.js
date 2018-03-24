@@ -79,6 +79,9 @@ class App extends Component {
                       );
                     })
                   }
+	                <Route path="/logout" render={ () => {
+		                window.location.reload();
+	                }} />
                 </Switch>
               <Footer />
             </div>
@@ -88,7 +91,7 @@ class App extends Component {
 }
 
 App.childContextTypes = {
-	user: PropTypes.object,
+	user: PropTypes.object.isRequired
 };
 
 export default App;
