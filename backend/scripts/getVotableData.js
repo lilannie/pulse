@@ -46,6 +46,9 @@ const getItems = cursor => {
                 for (sample of sample_pop) {
                   let sample_responses = sample.responses;
 
+                  let sample_name = sample.name;
+                  console.log(sample_name);
+
                   for (sample_response of sample_responses) {
                     var vote = {
                       choice: sample_response.text,
