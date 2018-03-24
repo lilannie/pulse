@@ -27,6 +27,7 @@ class Post extends Component {
 	}
 
 	toggleCommentForm(comment_open) {
+		console.log('toggleCommentForm');
 		this.setState({
 			comment_open,
 			comment: ''
@@ -92,7 +93,7 @@ class Post extends Component {
 							        pullRight
 							        fill
 							        type="submit"
-							        onSubmit={ this.saveComment }>
+							        onClick={ this.saveComment }>
 								Save
 							</Button>
 						</FormGroup>

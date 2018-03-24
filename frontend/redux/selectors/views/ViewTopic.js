@@ -1,3 +1,4 @@
+import { post_save_comment_action } from '../../reducers/comment';
 import { get_topic_posts_action } from '../../reducers/post';
 import { get_topic_votables_action } from '../../reducers/votable';
 import { get_voter_history_action, post_save_vote_action } from '../../reducers/vote';
@@ -25,6 +26,9 @@ export const mapDispatchToProps = dispatch => {
 		},
 		dispatchSaveVote: (params, callback) => {
 			dispatch(post_save_vote_action(params, callback));
+		},
+		dispatchSaveComment: (params, callback) => {
+			dispatch(post_save_comment_action(params, callback));
 		}
 	};
 };

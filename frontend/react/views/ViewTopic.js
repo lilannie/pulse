@@ -53,8 +53,20 @@ class ViewTopic extends Component {
 		);
 	}
 
-	handleSaveComment(params) {
+	handleSaveComment(comment) {
+		const {
+			dispatchSaveComment,
+			dispatchGetPosts,
+		} = this.props;
 
+		dispatchSaveComment(
+			Object.assign({
+				_creator_id: this.context.user.id
+			}, comment),
+			dispatchGetPosts.bind(null, {
+				topic_id: match.params.id
+			})
+		);
 	}
 
 	renderTopicItems() {
@@ -107,7 +119,8 @@ ViewTopic.PropTypes = {
 	dispatchGetPosts: PropTypes.func.isRequired,
 	dispatchGetVotables: PropTypes.func.isRequired,
 	dispatchGetVoterHistory: PropTypes.func.isRequired,
-	dispatchSaveVote: PropTypes.func.isRequired
+	dispatchSaveVote: PropTypes.func.isRequired,
+	dispatchSaveComment: PropTypes.func.isRequired
 };
 
 ViewTopic.contextTypes = {
