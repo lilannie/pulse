@@ -1,6 +1,10 @@
 const request = require('request');
+const mongoose = require('mongoose');
 const fs = require('fs');
+const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
+
+db.connect();
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 

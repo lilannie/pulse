@@ -3,7 +3,7 @@ const logger = require('morgan');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const config = require('../backend/mongo/config/config');
+const db = require('../backend/mongo/config/database');
 const app = express();
 const port = 8080;
 
@@ -14,17 +14,7 @@ app.use(express.static(path.resolve('public')));
 app.set('view engine', 'ejs');
 
 /** BEGIN MongoDB **/
-
-mongoose.Promise = global.Promise;
-mongoose.connect(config.url);
-mongoose.connection.once('open', () => {
-  console.log('Connected to MongoDB!');
-});
-mongoose.connection.on('error', err => {
-  console.log(err);
-  process.exit();
-});
-
+db.connect();
 /** END MongoDB **/
 
 /** BEGIN Authentication handlers **/

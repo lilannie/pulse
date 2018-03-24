@@ -10,6 +10,6 @@ exports.insert = legislature => {
     if (err) {
       console.log(err.stack);
     }
-    console.log(result);
+    console.log('Doc Added Successfully!');
   });
 };
