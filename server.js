@@ -3,7 +3,7 @@ const logger = require('morgan');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const db = require('../backend/mongo/config/database');
+const db = require('./backend/mongo/config/database');
 const app = express();
 const port = 8080;
 
@@ -37,7 +37,7 @@ app.all('/*', (req, res) => {
   // 	return;
   // }
 
-	console.log(req.path);
+  console.log(req.path);
 
   res.render('index', {
     // appData: JSON.stringify({
