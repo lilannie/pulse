@@ -9,3 +9,7 @@ export const paddingTop = amount => ({
 export const paddingBottom = amount => ({
 	paddingBottom: `${amount}px`
 });
+
+export const tableBorder = {
+	borderBottom: '1px solid #ddd'
+};

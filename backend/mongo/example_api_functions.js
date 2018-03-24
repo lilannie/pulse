@@ -179,5 +179,22 @@ module.exports = {
 				rank: 5
 			}
 		];
+	},
+
+	getVoterHistory: user_blockchain_id => {
+		return {
+			1: 'Agree', // _contract_id: choice the user made
+			2: 'Neutral',
+			3: 'Disagree'
+		};
+	},
+
+	saveVote: (user_blockchain_id, votable_contract_id, choice) => {
+		// Check if user has already voted on the votable, if so update that vote
+		// If the user has not already voted on the votable, create a vote
+		return {
+			status: 'Success',
+			error: null
+		};
 	}
-}
+};

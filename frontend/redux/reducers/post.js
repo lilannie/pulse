@@ -1,6 +1,6 @@
 import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
-const get_topic_posts = () => {
+const get_topic_posts = params => {
 	return new Promise((resolve, reject) => {
 		resolve([
 			{

@@ -13,15 +13,26 @@ class Votable extends Component {
 	}
 
 	renderChoices() {
-		return this.props.choices.map((choice, key) => {
+		const {
+			choices,
+			userChoice,
+			_contract_id,
+			handleChange
+		} = this.props;
 
+		return choices.map((choice, key) => {
 			return (
 				<tr key={key}>
 					<td>
 						<CustomRadio
 							number={ key }
 							option={ choice }
-							name={ this.props._contract_id }
+							name={ _contract_id }
+							onChange={ handleChange.bind(null, {
+								votable_contract_id: _contract_id,
+								choice
+							}) }
+							checked={  userChoice && userChoice === choice }
 						/>
 					</td>
 					<td>{ choice }</td>
@@ -63,8 +74,17 @@ class Votable extends Component {
 }
 
 Votable.PropTypes = {
+	_contract_id: PropTypes.number.isRequired,
+	creator: PropTypes.shape({
+		firstName: PropTypes.string.isRequired,
+		lastName: PropTypes.string.isRequired
+	}),
 	title: PropTypes.string.isRequired,
-
+	description: PropTypes.string.isRequired,
+	choices: PropTypes.array.isRequired,
+	rank: PropTypes.number.isRequired,
+	handleChange: PropTypes.func.isRequired,
+	userChoice: PropTypes.string
 };
 
 export default Votable;
