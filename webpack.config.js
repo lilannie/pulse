@@ -7,6 +7,9 @@ const paths = {
 };
 
 module.exports = {
+	stats: {
+		warnings: false
+	},
 	devtool: 'eval-source-map', // Faster rebuild, dev env only
   entry: [
 	  paths.entry
@@ -14,6 +17,7 @@ module.exports = {
   output: {
     path: paths.build,
     filename: paths.output,
+	  publicPath: './public'
   },
   resolve: {
     alias: {

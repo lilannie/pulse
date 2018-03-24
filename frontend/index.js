@@ -9,8 +9,8 @@ import thunk from 'redux-thunk';
 import { Switch, Route } from 'react-router-dom';
 
 import reducers from './redux/reducers';
-import App from './react/containers/App';
-import Login from './react/Login';
+import App from './react/App';
+import Login from './react/views/Login';
 
 const store = createStore(reducers, applyMiddleware(logger), applyMiddleware(thunk));
 
