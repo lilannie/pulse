@@ -1,0 +1,11 @@
+Error
+    at Request.request [as _callback] (/home/joe/Code/Hackathon/pulse/backend/scripts/cleanup_data.js:21:16)
+    at Request.self.callback (/home/joe/Code/Hackathon/pulse/node_modules/request/request.js:186:22)
+    at emitTwo (events.js:126:13)
+    at Request.emit (events.js:214:7)
+    at Request.<anonymous> (/home/joe/Code/Hackathon/pulse/node_modules/request/request.js:1081:10)
+    at emitOne (events.js:116:13)
+    at Request.emit (events.js:211:7)
+    at IncomingMessage.<anonymous> (/home/joe/Code/Hackathon/pulse/node_modules/request/request.js:1001:12)
+    at Object.onceWrapper (events.js:313:30)
+    at emitNone (events.js:111:20)

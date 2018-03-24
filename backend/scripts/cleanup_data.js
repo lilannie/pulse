@@ -3,6 +3,19 @@ const fs = require('fs');
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
+let db = null;
+
+// mongoose.Promise = global.Promise;
+// mongoose.connect('mongodb://quinns-macbook:8080');
+// mongoose.connection.once('open', () => {
+// 	console.log('Connected to MongoDB!');
+// });
+// mongoose.connection.on('error', err => {
+// 	console.log(err);
+// 	console.log('Oh no! Something Went Wrong!');
+// 	process.exit();
+// });
+
 let cursor = 28001;
 let cursors = [];
 let all_questions = [];
@@ -36,7 +49,7 @@ const getItems = cursor => {
 
               if (description && !all_questions.includes(description)) {
                 all_questions.push(description);
-                
+
                 let choices = [];
                 let votes = [];
                 for (sample of sample_pop) {
@@ -63,8 +76,10 @@ const getItems = cursor => {
                   choices: choices
                 };
 
-                console.log(votes);
-                console.log(votable);
+                
+                
+                //console.log(votes);
+                //console.log(votable);
               }// end if we have a question
 
             } // end foreach poll questions
@@ -85,9 +100,9 @@ const getItems = cursor => {
 };
 
 while(cursor > 1) {
-getItems(cursor).catch(error => {
-  console.log(error);
-  process.exit();
-});
-cursor -= 15;
+  getItems(cursor).catch(error => {
+    console.log(error);
+    process.exit();
+  });
+  cursor -= 15;
 }
