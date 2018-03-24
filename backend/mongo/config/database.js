@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 
 exports.connect = () => {
-  mongoose.Promise = global.Promise;
   mongoose.connect('mongodb://localhost/hackathon');
   mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB!');

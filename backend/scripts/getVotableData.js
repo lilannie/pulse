@@ -1,9 +1,16 @@
 const request = require('request-promise');
+const mongoose = require('mongoose');
 const nlp = require('compromise');
 const db = require('../mongo/config/database');
 const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 
-db.connect();
+// db.connect();
+
+const conn = async () => {
+  await db.connect();
+};
+
+conn();
 
 const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
@@ -78,7 +85,7 @@ getVotables(cursor).then(json => {
 
 const processText = descriptions => {
   for (let i = 0; i < descriptions.length; i++) {
-    console.log(descriptions[i]);
+    // console.log(descriptions[i]);
     // TODO
   }
 };
