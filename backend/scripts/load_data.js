@@ -101,8 +101,9 @@ db.connect().then(async (db) => {
 		{key: 'ideo', name: 'ideology'}
   ];
   
-  for(let i = 0; i < 3; i++) {
+  for(let i = 0; i < votables.length; i++) {
     let votable = votables[i];
+    
     let choices = votable.choices;
     let votable_id = 0;
     
@@ -120,11 +121,13 @@ db.connect().then(async (db) => {
       },
       body: JSON.stringify(contract)
     }, (error, data) => {
-      if(!data) return;
+      if(!data || error != null) return;
+
       let json = JSON.parse(data.body);
       votable.contract_id = json.data.minedAddress;
 
-      //console.log(votable.contract_id);
+      delete votable.col;
+      console.log(votable);
       db.model('Votable').create(votable, (error, new_votable) => {
         votable = new_votable;
 
@@ -163,12 +166,13 @@ db.connect().then(async (db) => {
 
           // make a get request to create a blockchain user
           request.get('http://localhost:3333/create/user', async (error, data) => {
-            if(!data) return; 
+            if(!data || error != null) return; 
             
             let json = JSON.parse(data.body);
             let newUserAddress = json.newUserAddress;
             citizen_data.blockchainID = newUserAddress;
 
+            console.log(citizen_data);
             /* Create a citizen */
             db.model('Citizen').create(citizen_data).then(citizen => {
               /* Handle votes for a citizen */
@@ -192,18 +196,19 @@ db.connect().then(async (db) => {
                   },
                   body: JSON.stringify(vote)
                 }, async (error, doc) => {
+                  if(!doc || error != null) return;
                   console.log('ERROR on request side')
                   console.log(error);
                   console.log(doc);
-                  await sleep(1200);
+                  await sleep(1500);
               });
             });
-            await sleep(1200);
+            await sleep(1500);
           });
         });
       });
     });
-    await sleep(1200);
+    await sleep(1500);
   }// end foreach loop over votables
 });
 
