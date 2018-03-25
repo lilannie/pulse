@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const Votable = require('../models/votable_model');
+const Vote = require('../models/vote_model');
+const Citizen = require('../models/citizen_model');
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -24,23 +26,10 @@ exports.getVotableIDs = () => {
   });
 };
 
-exports.getVoterHistory = user_blockchain_id => {
-  let blockchain_id = user_blockchain_id;
+exports.getVoterHistory = (id) => {
 
-  fetch(`http://localhost:3333/contract/history/${blockchain_id}`)
-    .then(res => res.json())
-    .then(json => console.log(json));
-
-  // return {
-  //   1: 'Agree', // _contract_id: choice the user made
-  //   2: 'Neutral',
-  //   3: 'Disagree'
-  // };
-
-  Citizen.find({blockchainId: user_blockchain_id}, (citizen) => {
-    return new Promise(resolve, reject, () =>{
-      resolve(citizen);
-    })
+  Vote.find({_id: id}, (vote) => {
+    console.log(vote);
   });
 
   // fetch(`http://localhost:3333/contract/history/${contract_id}`, {
@@ -53,12 +42,55 @@ exports.getVoterHistory = user_blockchain_id => {
   // .then(responseBody => console.log(responseBody))
 };
 
-exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
+exports.saveVote = (blockchainId, votable_contract_id, choice) => {
   // Check if user has already voted on the votable, if so update that vote
   // If the user has not already voted on the votable, create a vote
   // return {
   //   status: 'Success',
   //   error: null
   // };
+  return new Promise((resolve, reject) => {
+    db.model('Vote').create({
+      voterAddress: blockchainId,
+      contractAddress: votable_contract_id,
+	    response: choice
+    });
+  });
 };
 
+exports.getVotesGroupByState = contract_id => {
+	console.log(contract_id);
+	const getVotes = new Promise((resolve, reject) => {
+		fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(response => response.json())
+		.then(responseBody => {
+			// { data: { value: { addresses: [], response: [] } } }
+			const {
+				addresses,
+				response
+			} = responseBody.data.value;
+			console.log('response '+response);
+
+			resolve(response.map((res, index) => {
+				return {
+					blockchainId: addresses[index],
+					choice: res
+				}
+			}))
+			.catch(error => {
+				reject(error);
+			})
+		})
+	});
+
+	getVotes.then(() => {}).catch(() => {});
+
+	const getCitizens = new Promise((resolve, reject) => {
+
+	});
+};
