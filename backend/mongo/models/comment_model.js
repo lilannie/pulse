@@ -8,4 +8,4 @@ const Comment = new mongoose.Schema({
 });
 
 // Create a Votable Model and Export It
-module.exports = mongoose.model('Votable', Votable);
+module.exports = mongoose.model('Comment', Comment);

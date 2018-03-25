@@ -1,14 +1,15 @@
 const Topic = require('../models/topic_model');
 
-// Promisify
 exports.getAllTopics = () => {
-  Topic.find((err, results) => {
-    if (err) {
-      console.err('Oh no! Something Went Wrong!');
-      console.log(err.stack);
-    } else {
+  new Promise((resolve, reject) => {
+    Topic.find((err, results) => {
+      if (err) {
+        console.log(err.stack);
+        return reject(err);
+      }
       console.log(results);
-    }
+      resolve(results);
+    });
   });
 };
 
