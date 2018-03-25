@@ -14,7 +14,12 @@ exports.insert = legislature => {
   });
 };
 
-// TODO
+exports.getVotableIDs = () => {
+  Votable.distinct('_id', (err, results) => {
+    // console.log(results);
+  });
+};
+
 exports.getVoterHistory = user_blockchain_id => {
   // return {
   //   1: 'Agree', // _contract_id: choice the user made
