@@ -8,6 +8,14 @@ const csv = require('csvtojson');
 const labels = require('./conversions');
 const Votable = require('../mongo/models/citizen_model');
 
+const createVotable = (model, votable) => new Promise((resolve, reject) => {
+	model.create(votable, (err, newVotable) => {
+		if (err) return reject(err);
+
+		resolve(newVotable);
+	});
+});
+
 db.connect().then(async (db) => {
   /*******************************************************
    *******************************************************
@@ -16,6 +24,7 @@ db.connect().then(async (db) => {
    *******************************************************/
   let temp_votables = votable_data.votables;
   let votables = votable_data.votables;
+  let votable_model = db.model('Votable');
 
 	const input_path = 'citizen.csv';
 	const demographics = [
@@ -42,10 +51,24 @@ db.connect().then(async (db) => {
 				itemID: index,
 				responses: votable.choices
 			})
-		}).then(response => response.json())
+		})
+			.then(response => response.json().data)
 			.then(response => {
-				console.log(response);
+				console.log(response); 		// { data: { minedAddress: '0xd4551377391fcb97ed81da31e962ae55d295a26c' } }
+				votable.contract_id = response.minedAddress;
+
+				delete votable.col;
+				console.log(votable);
+
+				return createVotable(votable_model, votable);
+			})
+			.then(newVotable => {
+				console.log(newVotable);
+			})
+			.catch(error => {
+				console.log(error);
 			});
+
 		return false;
 	});
 
