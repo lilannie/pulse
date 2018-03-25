@@ -5,7 +5,8 @@ const Votable = new mongoose.Schema({
   // creator_id: Number,
   // title: String,
   description: String,
-  choices: [String]
+  choices: [String],
+	topics: [String]
 });
 
 // Create a Votable Model and Export It
