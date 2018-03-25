@@ -1,6 +1,6 @@
 import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
-const post_save_comment = (params, callback) => {
+const post_create_comment = (params, callback) => {
 	return new Promise((resolve, reject) => {
 		resolve({
 			status: 'Success',
@@ -11,8 +11,8 @@ const post_save_comment = (params, callback) => {
 	});
 };
 
-export const post_save_comment_action =
-	createActionAsync('POST_SAVE_COMMENT', post_save_comment);
+export const post_create_comment_action =
+	createActionAsync('POST_CREATE_COMMENT', post_create_comment);
 
-export const save_comment =
-	createReducerAsync(post_save_comment_action);
+export const create_comment =
+	createReducerAsync(post_create_comment_action);

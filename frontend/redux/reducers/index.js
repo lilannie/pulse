@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
 import {
-	save_comment
+	create_comment
 } from './comment';
 
 import {
@@ -23,7 +23,7 @@ import {
 } from './vote';
 
 const reducers = combineReducers({
-	save_comment,
+	create_comment,
 	topic_posts,
 	topic,
 	topics,
