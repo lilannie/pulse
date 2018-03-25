@@ -5,8 +5,8 @@ exports.createPost = post =>
     let p = new Post({
       content: post.content,
       comment_ids: post.comment_ids,
-      topic: [String],
-      location: String,
+      topic: post.topic,
+      location: post.location,
       rank: 0,
       date: Date.now()
     });
