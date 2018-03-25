@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const Votable = require('../models/votable_model');
 const Vote = require('../models/vote_model');
 const Citizen = require('../models/citizen_model');
+const db = require('../config/database');
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -50,10 +51,12 @@ exports.saveVote = (blockchainId, votable_contract_id, choice) => {
   //   error: null
   // };
   return new Promise((resolve, reject) => {
-    db.model('Vote').create({
-      voterAddress: blockchainId,
-      contractAddress: votable_contract_id,
-	    response: choice
+    return Vote.create({
+      user_id: blockchainId,
+      votable_id: votable_contract_id,
+	    choice: choice
+    }, (err, newVote) => {
+      resolve(newVote);
     });
   });
 };
