@@ -67,3 +67,18 @@ export const get_topic_votables_action =
 
 export const topic_votables =
 	createReducerAsync(get_topic_votables_action);
+
+const post_create_votable = params => {
+	return new Promise((resolve, reject) => {
+		resolve({
+			status: 'Success',
+			error: null
+		});
+	});
+};
+
+export const post_create_votable_action =
+	createActionAsync('CREATE_VOTABLE_ACTION', post_create_votable);
+
+export const create_votable =
+	createReducerAsync(post_create_votable_action);

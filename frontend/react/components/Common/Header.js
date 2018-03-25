@@ -3,14 +3,21 @@ import { Navbar } from 'react-bootstrap';
 
 import HeaderLinks from './HeaderLinks.js';
 
-import appRoutes from '../../util/routes.js';
-
 class Header extends Component{
     constructor(props){
         super(props);
         this.mobileSidebarToggle = this.mobileSidebarToggle.bind(this);
+        this.getBrand = this.getBrand.bind(this);
+
         this.state = {
             sidebarExists: false
+        };
+
+        this._branding = {
+	        '/topics': 'Topics',
+	        '/post/create': 'Create Post',
+	        '/votable/create': 'Create Poll',
+	        '/dashboard': 'Dashboard'
         };
     }
 
@@ -33,9 +40,9 @@ class Header extends Component{
     }
 
     getBrand(){
-	    if (this.props.location.pathname === '/topics') return 'Topics';
+	    if (new RegExp('(/topic/)\\d+(/view)').test(this.props.location.pathname)) return 'Topic Votables and Posts';
 
-	    if(new RegExp('(/topic/)\\d+(/view)').test(this.props.location.pathname)) return 'Topic';
+	    return this._branding[this.props.location.pathname];
     }
 
     render(){

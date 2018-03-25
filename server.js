@@ -17,21 +17,6 @@ app.set('view engine', 'ejs');
 // db.connect();
 /** END MongoDB **/
 
-/** BEGIN Blockchain **/
-let contractAddressList = [];
-let userCount = 1; //skips the 0 index because we create contracts from that account
-let record = {};
-let userHistory = [];
-const blockchain_port = 8545;
-
-const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:" + blockchain_port));
-
-//routes
-require('./backend/blockchain/routes')(app, web3, contractAddressList, userCount, userHistory);
-
-/** END Blockchain **/
-
 /** BEGIN Authentication handlers **/
 
 app.get('/logout', (req, res) => {
@@ -62,7 +47,7 @@ app.all('/*', (req, res) => {
     appData: JSON.stringify({
       user: {
         id: '1234567',
-        is_citizen: true
+        is_citizen: false
       }
     })
   });

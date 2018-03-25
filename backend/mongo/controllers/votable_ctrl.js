@@ -28,6 +28,7 @@ exports.getVoterHistory = user_blockchain_id => {
   // };
 };
 
+// TODO
 exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
   // Check if user has already voted on the votable, if so update that vote
   // If the user has not already voted on the votable, create a vote

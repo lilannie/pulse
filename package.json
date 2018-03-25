@@ -51,6 +51,7 @@
     "react-notification-system": "^0.2.17",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
+    "react-select": "^1.2.1",
     "redux": "^3.7.2",
     "redux-act-async": "^1.7.0",
     "redux-form": "^7.3.0",
