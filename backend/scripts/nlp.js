@@ -8,8 +8,6 @@ const votable_ctrl = require('../mongo/controllers/votable_ctrl');
 db.connect().then(db => {
   // Get all Votables
   db.model('Votable').find({}, (err, docs) => {
-    console.log(docs[0]);
-
     const nlp_options = {
       language: 'english',
       remove_digits: true,
@@ -30,8 +28,6 @@ db.connect().then(db => {
     // Find the top ten keywords
     const top_topics = findTopTopics(votable_keywords);
 
-    console.log(top_topics);
-
     // For each votable, add store keyword if they contain a top ten keyword
     votable_keywords.forEach(votable_keyword => {
       const { _id, keywords } = votable_keyword;
@@ -43,16 +39,14 @@ db.connect().then(db => {
 
       if (new_keywords.length > 0) {
         db.model('Votable').findById(_id, (err, votable) => {
-          if (!err) {
-            votabe.set({ keywords: new_keywords });
-            votable
-              .save((err, updatedVotable) => {
-                console.log(updatedVotable, 'save successful');
-              })
-              .catch(error => {
-                console.log(error);
-              });
-          }
+          votable.set('topics', new_keywords);
+          votable.markModified('topics');
+          votable.save((err, votable_save) => {
+            if (err) {
+              console.log(err.stack);
+            }
+            // console.log('topics saved');
+          });
         });
       }
     });
@@ -82,14 +76,8 @@ const findTopTopics = topics => {
 
   // Sort results by keyword occurences in descending order
   count.sort((obj1, obj2) => obj2.count - obj1.count);
-
   const ignoredKeywords = ['today', 'vote', 'held', 'candidate', 'presidential'];
-
   count = count.slice(0, 15);
-
   count = count.filter(obj => ignoredKeywords.indexOf(obj.keyword) < 0);
-
   return count.map(obj => obj.keyword);
 };
-
-votable_ctrl.getVotableIDs();
