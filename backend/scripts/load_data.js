@@ -82,7 +82,9 @@ db.connect().then(async (db) => {
 
 			csv().fromFile(input_path)
 				.on('json', row => {
-						const citizen_data = {};
+						const citizen_data = {
+							demographicInfo: {}
+						};
 
 						for (let col of demographics) {
 							const col_name = col.name != null ? col.name : col.key;
@@ -95,6 +97,8 @@ db.connect().then(async (db) => {
 								.then(response => response.json())
 								.then(response => {
 									console.log(response);
+
+									// citizen_data.blockchainID
 								})
 								.catch(error => {
 									console.log(error);
