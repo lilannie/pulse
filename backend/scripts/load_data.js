@@ -199,8 +199,10 @@ db.connect().then(async (db) => {
                   console.log(error);
                   console.log(doc);
               });
+              await sleep(1000);
             });
-          }); 
+          });
+          await sleep(1000); 
         });
       });
     });
