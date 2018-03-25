@@ -39,6 +39,39 @@ const createVotables = (votable_model, votables) =>
 			});
 	}));
 
+const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) => {
+	fetch('http://localhost:3333/create/user')
+		.then(response => response.json())
+		.then(response => {
+			citizen.blockchainID = response.newUserAddress;
+
+			citizen_model.create(console, (error, newCitizen) => {
+				resolve(newCitizen);
+			});
+		})
+		.catch(error => {
+			reject(error);
+		})
+});
+
+const createVote = vote =>
+	fetch('http://localhost:3333/contract/vote', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(vote)
+	});
+
+const createVotes = (votables, voterAddress, choices)  =>
+	Promise.all(votables.map((votable, index) => {
+		return createVote({
+			voterAddress,
+			contractAddress: votable.contract_id,
+			response: choices[index]
+		})
+	}));
+
 const convertDemographic = (key, row) => {
   let data = row[key];
   data--;
@@ -60,6 +93,7 @@ db.connect().then(async (db) => {
   let temp_votables = votable_data.votables;
   let votables = votable_data.votables;
   let votable_model = db.model('Votable');
+  let citizen_model = db.model('Citizen');
 
 	const input_path = 'citizen.csv';
 	const demographics = [
@@ -77,33 +111,38 @@ db.connect().then(async (db) => {
   ];
 
 	createVotables(votable_model, votables)
-		.then(resultArray => {
-			console.log(resultArray);
+		.then(voteableResults => {
+			console.log(voteableResults);
 
 			csv().fromFile(input_path)
 				.on('json', row => {
-						const citizen_data = {
+						const citizen = {
 							demographicInfo: {}
 						};
 
 						for (let col of demographics) {
 							const col_name = col.name != null ? col.name : col.key;
 
-							citizen_data.demographicInfo[col_name] = col.no_convert
+							citizen.demographicInfo[col_name] = col.no_convert
 								? row[col.key]
 								: convertDemographic(col.key, row);
-
-							fetch('http://localhost:3333/create/user')
-								.then(response => response.json())
-								.then(response => {
-									console.log(response);
-
-									// citizen_data.blockchainID
-								})
-								.catch(error => {
-									console.log(error);
-								})
 						}
+
+						createCitizen(citizen_model, citizen)
+							.then(newCitizen => {
+
+								const userChoices = temp_votables.map(votable => {
+									return convertChoice(votable.col, row, votable.choices);
+								});
+
+								return createVotes(votables, newCitizen.blockchainID, userChoices);
+							})
+							.then(voteResults => {
+								console.log('SUCCESS');
+							})
+							.catch(error => {
+								console.log(error);
+							});
 				});
 		})
 		.catch(error => {
