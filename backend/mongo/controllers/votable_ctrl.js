@@ -1,4 +1,6 @@
 const Votable = require('../models/votable_model');
+const fetch = require('node-fetch');
+const Citizens = require('citizen_ctrl');
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -36,4 +38,8 @@ exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
   //   status: 'Success',
   //   error: null
   // };
+};
+
+exports.getVotesGroupByState = contract_id => {
+
 };
