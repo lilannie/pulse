@@ -53,11 +53,12 @@ exports.getVotesGroupByState = contract_id => {
 		.then(response => response.json())
 		.then(responseBody => {
 			// { data: { value: { addresses: [], response: [] } } }
+			console.dir(responseBody);
+
 			const {
 				addresses,
 				response
 			} = responseBody.data.value;
-			console.log('response '+response);
 
 			resolve(response.map((res, index) => {
 				return {
