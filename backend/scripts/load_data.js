@@ -8,9 +8,11 @@ const csv = require('csvtojson');
 const labels = require('./conversions');
 const Votable = require('../mongo/models/citizen_model');
 
-db.connect().then(db => {
-/*******************************************************
- *    Load votables from web API                       *
+db.connect().then(async (db) => {
+/******************************************************
+ ******************************************************
+ *          Load votables from web API                *
+ ******************************************************
  ******************************************************/
   const base_url = 'https://elections.huffingtonpost.com/pollster/api/v2/';
 
@@ -78,21 +80,13 @@ db.connect().then(db => {
       // keep track of all cursors so we don't count dupes
       cursors.push(cursor);
     } // end if not a dupe cursor
-
-    // Use nlp to categorize questions and generate a list of topics
-    processText(descriptions);
   });
   
-  const processText = descriptions => {
-    for (let i = 0; i < descriptions.length; i++) {
-      // console.log(descriptions[i]);
-      // TODO
-    }
-  };
-
   /*******************************************************
+   *******************************************************
    *    Load citizens + votables from dataset            *
-   ******************************************************/
+   *******************************************************
+   *******************************************************/
   let temp_votables = votable_data.votables;
   let votables = votable_data.votables;
 	const input_path = 'citizen.csv';
@@ -108,71 +102,70 @@ db.connect().then(db => {
 		{key: 'citizen', name: 'isCitizen'},
 		{key: 'educ2', name: 'educationLevel'},
 		{key: 'ideo', name: 'ideology'}
-	];
-
-  /* Insert votables */
-	db.model('Votable').insertMany(votables, (error, doc) => {
-    votables = doc;
+  ];
+  
+  for(let i = 0; i < 3; i++) {
+    let votable = votables[i];
+    let choices = votable.choices;
+    let votable_id = 0;
     
-    const convertDemographic = (key, row) => {
-      let data = row[key];
-      data--;
-      return data > labels[key].length || data < 0 || isNaN(data) ? "Don't Know" : labels[key][data];
-    };
-  
-    const convertChoice = (key, row, choices) => {
-      let data = row[key];
-      data--;
-      return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
-    };
+    /* Create the blockchain contract for each votable */
+    let contract = {
+      itemID: i,
+      responses: choices
+    }
 
-    for(let i = 0; i < votables.length; i++) {
-      let votable = votables[i];
-      let choices = votable.choices;
-      let votable_id = votable._id;
-      
-      /* Create the blockchain contract for each votable */
-      let contract = {
-        itemID: votable_id,
-        responses: choices
-      }
-  
-      request.post({
-        url: 'http://localhost:3333/contract/create',
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(contract)
-      }, (error, doc) => {
-        console.log('ERROR on request side')
-        console.log(error);
-        console.log(doc);
-      });
-    }// end foreach loop over votables
+    request.post({
+      url: 'http://localhost:3333/contract/create',
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(contract)
+    }, (error, data) => {
+      if(!data) return;
+      let json = JSON.parse(data.body);
+      votable.contract_id = json.data.minedAddress;
 
-    csv()
-      .fromFile(input_path)
-      .on('json', row => {
-        let citizen_data = { blockchainID: 0, demographicInfo: {} };
+      //console.log(votable.contract_id);
+      db.model('Votable').create(votable, (error, new_votable) => {
+        votable = new_votable;
+
+        const convertDemographic = (key, row) => {
+          let data = row[key];
+          data--;
+          return data > labels[key].length || data < 0 || isNaN(data) ? "Don't Know" : labels[key][data];
+        };
+
+        const convertChoice = (key, row, choices) => {
+          let data = row[key];
+          data--;
+          return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
+        };
         
-        for (prop of demographics) {
-          let real_name = '';
+        csv().fromFile(input_path).on('json', row => {
+          // loop over content of .csv file
+          let citizen_data = { blockchainID: 0, demographicInfo: {} };
           
-          if(prop.name != null){
-            real_name = prop.name;
-          }else{
-            real_name = prop.key;
-          }
+          // loop over each demographic prop
+          for (prop of demographics) {
+            let real_name = '';
+            
+            if(prop.name != null){
+              real_name = prop.name;
+            }else{
+              real_name = prop.key;
+            }
 
-          if (prop.no_convert) {
-            citizen_data.demographicInfo[real_name] = row[prop.key];
-          } else {
-            citizen_data.demographicInfo[real_name] = convertDemographic(prop.key, row);
-          } // end if dont convert
-        } // end foreach prop
-        
-        request.get('http://localhost:3333/create/user', (error, data) => {
+            if (prop.no_convert) {
+              citizen_data.demographicInfo[real_name] = row[prop.key];
+            } else {
+              citizen_data.demographicInfo[real_name] = convertDemographic(prop.key, row);
+            } // end if dont convert
+          } // end foreach prop
+
+          // make a get request to create a blockchain user
+          request.get('http://localhost:3333/create/user', (error, data) => {
             if(!data) return; 
             
             let json = JSON.parse(data.body);
@@ -182,49 +175,39 @@ db.connect().then(db => {
             /* Create a citizen */
             db.model('Citizen').create(citizen_data).then(citizen => {
               /* Handle votes for a citizen */
-              let citizen_id = citizen._id;
+              let choices = votable.choices;
+              let choice = convertChoice(temp_votables[i].col, row, choices);
+              let votable_id = votable._id;
 
-              for(let i = 0; i < 1; i++) {
-                let votable = votables[i];
-                let choices = votable.choices;
-                let choice = convertChoice(temp_votables[i].col, row, choices);
-                let votable_id = votable._id;
+              /* Store vote in Blockchain */
+              let vote = {
+                voterAddress: newUserAddress,
+                contractAddress: votable.contract_id,
+                response: choice
+              };
 
-                let contract = {
-                  itemID: votable_id,
-                  responses: choices
-                }
-
-                // console.log('adding to database');
-                // console.log(contract);
-
-                // request.post({
-                //     url: 'http://localhost:3333/contract/create',
-                //     method: "POST",
-                //     headers: {
-                //       'Content-Type': 'application/json'
-                //     },
-                //     body: JSON.stringify(contract)
-                //   }, (error, doc) => {
-                //     console.log('ERROR on request side')
-                //     console.log(error);
-                //     console.log(doc);
-                // });
-          
-                /* Store vote in Blockchain */
-                let vote = {
-                  citizen_id: citizen_id,
-                  votable_id: votable_id,
-                  choice: choice
-                };
-                
-                //console.log(vote);
-              } // end for loop over votables
-          });
+              //console.log(vote);
+              request.post({
+                  url: 'http://localhost:3333/contract/vote',
+                  method: "POST",
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(vote)
+                }, (error, doc) => {
+                  console.log('ERROR on request side')
+                  console.log(error);
+                  console.log(doc);
+              });
+            });
+          }); 
         });
-
-        
+      });
     });
-
-	});
+    await sleep(1000);
+  }// end foreach loop over votables
 });
+
+const sleep = (ms) => {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}

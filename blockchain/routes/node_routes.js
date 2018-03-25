@@ -16,7 +16,6 @@ module.exports = function (app, web3, contractAddressList, userCount, userHistor
 	//compiles and deploys contract on blockchain
 	//returns address of new contract
 	app.post('/contract/create', (req, res) => {
-		console.log(req.body);
 		make.createContract(req.body.itemID, req.body.responses)
   		.then(result => {
   			res.send({ 
