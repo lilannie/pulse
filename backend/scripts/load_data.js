@@ -32,14 +32,36 @@ const createVotables = (votable_model, votables) =>
           .then(response => response.json())
           .then(response => {
             // { data: { minedAddress: '' } }
-            console.log(response);
             votable.contract_id = response.data.minedAddress;
-
-            delete votable.col;
             return createVotable(votable_model, votable);
           });
     })
   );
+
+sequential(
+  votables.map((votable, index) => {
+    return () =>
+      fetch('http://localhost:3333/contract/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          itemID: index,
+          responses: votable.choices
+        })
+      })
+        .then(response => response.json())
+        .then(response => {
+          // { data: { minedAddress: '' } }
+          votable.contract_id = response.data.minedAddress;
+
+          let temp_votable = Object.assign(votable);
+          //delete temp_votable.col;
+          return createVotable(votable_model, temp_votable);
+        });
+  })
+);
 
 const createCitizen = async (citizen_model, citizen) =>
   await fetch('http://localhost:3333/create/user', {
@@ -68,12 +90,12 @@ const createVote = async vote =>
     body: JSON.stringify(vote)
   });
 
-const createVotes = (votables, voterAddress, choices) =>
+const createVotes = (votables, voterAddress, choices, vote_model) =>
   sequential(
     votables.map((votable, index) => {
       return () =>
-        createVote({
-          voterAddress,
+        createVote(vote_model, {
+          voterAddress: voterAddress,
           contractAddress: votable.contract_id,
           response: choices[index]
         });
@@ -102,6 +124,7 @@ db.connect().then(async db => {
   let votables = votable_data.votables;
   let votable_model = db.model('Votable');
   let citizen_model = db.model('Citizen');
+  let vote_model = db.model('Vote');
 
   const input_path = 'citizen.csv';
   const demographics = [
@@ -120,6 +143,8 @@ db.connect().then(async db => {
 
   createVotables(votable_model, votables)
     .then(voteableResults => {
+      console.log(voteableResults);
+
       csv()
         .fromFile(input_path)
         .on('json', row => {
@@ -134,11 +159,47 @@ db.connect().then(async db => {
 
           createCitizen(citizen_model, citizen)
             .then(newCitizen => {
-              console.log(newCitizen);
               const userChoices = temp_votables.map(votable => {
                 return convertChoice(votable.col, row, votable.choices);
               });
-              return createVotes(votables, citizen.blockchainID, userChoices);
+              return createVotes(votables, citizen.blockchainID, userChoices, vote_model);
+            })
+            .then(voteResults => {
+              console.log('SUCCESS');
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+
+  createVotables(votable_model, votables)
+    .then(voteableResults => {
+      console.log(voteableResults);
+
+      csv()
+        .fromFile(input_path)
+        .on('json', row => {
+          const citizen = {
+            demographicInfo: {}
+          };
+
+          for (let col of demographics) {
+            const col_name = col.name != null ? col.name : col.key;
+
+            citizen.demographicInfo[col_name] = col.no_convert ? row[col.key] : convertDemographic(col.key, row);
+          }
+
+          createCitizen(citizen_model, citizen)
+            .then(newCitizen => {
+              const userChoices = temp_votables.map(votable => {
+                return convertChoice(votable.col, row, votable.choices);
+              });
+
+              return createVotes(votables, citizen.blockchainID, userChoices, vote_model);
             })
             .then(voteResults => {
               console.log('SUCCESS');

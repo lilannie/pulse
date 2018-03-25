@@ -2,7 +2,8 @@ const db = require('../mongo/config/database');
 const votable_data = require('./votables');
 const csv = require('csvtojson');
 const labels = require('./conversions');
-const Votable = require('../mongo/models/citizen_model');
+const Citizen = require('../mongo/models/citizen_model');
+const Votable = require('../mongo/models/votable_model');
 const Vote = require('../mongo/models/vote_model');
 
 const createVotable = (model, votable) => new Promise((resolve, reject) => {
@@ -72,10 +73,11 @@ db.connect().then(async (db) => {
 
 	createVotables(votable_model, votables)
 		.then(voteableResults => {
-			console.log(voteableResults);
+			// console.log(voteableResults);
 
 			csv().fromFile(input_path)
 				.on('json', row => {
+					console.log(row);
 					const citizen = {
 						demographicInfo: {}
 					};
@@ -90,11 +92,10 @@ db.connect().then(async (db) => {
 
 					createCitizen(citizen_model, citizen)
 					.then(newCitizen => {
-
+						console.log(newCitizen);
 						const userChoices = temp_votables.map(votable => {
 							return convertChoice(votable.col, row, votable.choices);
 						});
-
 
 						return Promise.all(votables.map((votable, index) => {
 							return createVote(vote_model, {
@@ -105,6 +106,7 @@ db.connect().then(async (db) => {
 						}));
 					})
 					.then(voteResults => {
+						console.log(voteResults);
 						console.log('SUCCESS');
 					})
 					.catch(error => {
