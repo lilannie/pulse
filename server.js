@@ -29,6 +29,21 @@ app.post('/login', (req, res) => {
   res.redirect('/');
 });
 
+const controllers = {
+	vote: require('./backend/mongo/controllers/vote_ctrl'),
+	votable: require('./backend/mongo/controllers/votable_ctrl')
+};
+
+app.post('/api/mongo/:controller/:method', (req, res) => {
+	controllers[req.params.controller][req.params.method](req.body)
+		.then(result => {
+			res.send(result);
+		})
+		.catch(error => {
+			res.send(error);
+		});
+});
+
 /** END Authentication handlers **/
 
 app.all('/*', (req, res) => {
