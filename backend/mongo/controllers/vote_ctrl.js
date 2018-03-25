@@ -1,4 +1,3 @@
-const fetch = require('node-fetch');
 const Citizen = require('../models/citizen_model');
 const Vote = require('../models/vote_model');
 const _ = require('lodash');
