@@ -159,7 +159,7 @@ db.connect().then(async db => {
               const userChoices = temp_votables.map(votable => {
                 return convertChoice(votable.col, row, votable.choices);
               });
-              return createVotes(votables, citizen.blockchainID, userChoices);
+              return createVotes(votables, citizen.blockchainID, userChoices, vote_model);
             })
             .then(voteResults => {
               console.log('SUCCESS');
