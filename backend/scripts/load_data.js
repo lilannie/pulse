@@ -52,10 +52,10 @@ db.connect().then(async (db) => {
 				responses: votable.choices
 			})
 		})
-			.then(response => response.json().data)
+			.then(response => response.json())
 			.then(response => {
 				console.log(response); 		// { data: { minedAddress: '0xd4551377391fcb97ed81da31e962ae55d295a26c' } }
-				votable.contract_id = response.minedAddress;
+				votable.contract_id = response.data.minedAddress;
 
 				delete votable.col;
 				console.log(votable);
