@@ -43,10 +43,7 @@ const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) 
 			'Content-Type': 'application/json'
 		}
 	})
-		.then(response => {
-			console.log(response);
-			return response.json()
-		})
+		.then(response => response.json())
 		.then(response => {
 			citizen.blockchainID = response.newUserAddress;
 
