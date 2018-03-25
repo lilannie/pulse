@@ -78,13 +78,29 @@ db.connect().then(async (db) => {
 
 	createVotables(votable_model, votables)
 		.then(resultArray => {
-			console.log(votables[0]);
 			console.log(resultArray);
 
-			// csv().fromFile(input_path)
-			// 	.on('json', row => {
-			//
-			// 	});
+			csv().fromFile(input_path)
+				.on('json', row => {
+						const citizen_data = {};
+
+						for (let col of demographics) {
+							const col_name = col.name != null ? col.name : col.key;
+
+							citizen_data.demographicInfo[col_name] = col.no_convert
+								? row[col.key]
+								: convertDemographic(col.key, row);
+
+							fetch('http://localhost:3333/create/user')
+								.then(response => response.json())
+								.then(response => {
+									console.log(response);
+								})
+								.catch(error => {
+									console.log(error);
+								})
+						}
+				});
 		})
 		.catch(error => {
 			console.log(error);
