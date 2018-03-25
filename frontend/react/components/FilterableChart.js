@@ -46,6 +46,9 @@ class FilterableChart extends Component {
 							simpleValue
 							value={ this.state.value }
 						/>
+
+						<div id="non-continguous-cartogram">
+						</div>
 					</div>
 				}
 			/>

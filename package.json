@@ -34,6 +34,7 @@
     "classnames": "^2.2.5",
     "csv-parse": "^2.0.4",
     "csvtojson": "^1.1.9",
+    "d3-geo": "^1.10.0",
     "ejs": "^2.5.7",
     "express": "^4.16.3",
     "ganache-cli": "^6.1.0",

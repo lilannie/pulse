@@ -16,7 +16,7 @@ const createVotable = (model, votable) => new Promise((resolve, reject) => {
 
 const createVotables = (votable_model, votables) =>
 	sequential(votables.map((votable, index) => {
-		return fetch('http://localhost:3333/contract/create', {
+		return () => fetch('http://localhost:3333/contract/create', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ const createVote = vote =>
 
 const createVotes = (votables, voterAddress, choices)  =>
 	sequential(votables.map((votable, index) => {
-		return createVote({
+		return () => createVote({
 			voterAddress,
 			contractAddress: votable.contract_id,
 			response: choices[index]
