@@ -28,6 +28,7 @@ exports.getVotableIDs = () => {
 };
 
 exports.getVoterHistory = user_blockchain_id => {
+<<<<<<< Updated upstream
   let blockchain_id = user_blockchain_id;
 
   fetch(`http://localhost:3333/contract/history/${blockchain_id}`)
@@ -39,6 +40,23 @@ exports.getVoterHistory = user_blockchain_id => {
   //   2: 'Neutral',
   //   3: 'Disagree'
   // };
+=======
+
+  Citizen.find({blockchainId: user_blockchain_id}, (citizen) => {
+    return new Promise(resolve, reject, () =>{
+      resolve(citizen);
+    })
+  });
+
+  // fetch(`http://localhost:3333/contract/history/${contract_id}`, {
+  //   method: 'GET',
+  //   headers: {
+  //     'Content-Type': 'application/json'
+  //   }
+  // })
+  // .then(response => response.json())
+  // .then(responseBody => console.log(responseBody))
+>>>>>>> Stashed changes
 };
 
 exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
