@@ -15,17 +15,19 @@ import Footer from './components/Common/Footer';
 import Sidebar from './components/Common/Sidebar';
 
 import { style } from './util/variables.js';
-
-import appRoutes from './util/routes.js';
+import { getRoutes } from './util/routes.js';
 
 class App extends Component {
     constructor(props){
-        super(props);
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.handleNotificationClick = this.handleNotificationClick.bind(this);
-        this.state = {
-            _notificationSystem: null
-        };
+      super(props);
+      this.componentDidMount = this.componentDidMount.bind(this);
+      this.handleNotificationClick = this.handleNotificationClick.bind(this);
+
+      this.state = {
+          _notificationSystem: null
+      };
+
+	    this._routes = getRoutes(window.appData.user.is_citizen);
     }
 
 		getChildContext() {
@@ -33,8 +35,6 @@ class App extends Component {
 		}
 
     handleNotificationClick(position){
-    	  console.log('handleNotificationClick');
-
         this.state._notificationSystem.addNotification({
             title: (<span data-notify="icon" className="pe-7s-gift"></span>),
             message: (
@@ -62,12 +62,12 @@ class App extends Component {
         return (
           <div className="wrapper">
             <NotificationSystem ref="notificationSystem" style={style}/>
-            <Sidebar {...this.props} />
+            <Sidebar {...this.props} is_citizen={window.appData.user.is_citizen} />
             <div id="main-panel" className="main-panel">
               <Header {...this.props}/>
                 <Switch>
                   {
-                    appRoutes.map((prop,key) => {
+                    this._routes.map((prop,key) => {
                       if(prop.redirect) {
 	                      return (
 		                      <Redirect from={prop.path} to={prop.to} key={key}/>
