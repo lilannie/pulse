@@ -25,8 +25,9 @@ const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) 
 	});
 });
 
-const createVote = (votable_model, vote) => new Promise((resolve, reject) => {
-	votable_model.create(vote, (error, newVote) => {
+const createVote = (vote_model, vote) => new Promise((resolve, reject) => {
+	console.log(vote);
+	vote_model.create(vote, (error, newVote) => {
 		if (error) return reject(error);
 		resolve(newVote);
 	});
@@ -44,7 +45,7 @@ const convertChoice = (key, row, choices) => {
   return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
 };
 
-db.connect().then(async (db) => {
+db.connect().then( (db) => {
   /*******************************************************
    *******************************************************
    *    Load citizens + votables from dataset            *
@@ -77,7 +78,7 @@ db.connect().then(async (db) => {
 
 			csv().fromFile(input_path)
 				.on('json', row => {
-					console.log(row);
+					//console.log(row);
 					const citizen = {
 						demographicInfo: {}
 					};
@@ -92,22 +93,22 @@ db.connect().then(async (db) => {
 
 					createCitizen(citizen_model, citizen)
 					.then(newCitizen => {
-						console.log(newCitizen);
+						//console.log(newCitizen);
 						const userChoices = temp_votables.map(votable => {
 							return convertChoice(votable.col, row, votable.choices);
 						});
 
 						return Promise.all(votables.map((votable, index) => {
 							return createVote(vote_model, {
-								voterAddress: newCitizen.blockchainID,
+								voterAddress: citizen.blockchainID,
 								contractAddress: votable.contract_id,
 								response: userChoices[index]
 							})
 						}));
 					})
 					.then(voteResults => {
-						console.log(voteResults);
-						console.log('SUCCESS');
+						//console.log(voteResults);
+						//console.log('SUCCESS');
 					})
 					.catch(error => {
 						console.log(error);

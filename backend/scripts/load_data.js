@@ -8,6 +8,7 @@ const Citizen = require('../mongo/models/citizen_model');
 const Vote = require('../mongo/models/vote_model');
 const sequential = require('promise-sequential');
 
+/* TODO: Print this code out on a sheet of paper and burn it */
 votables = votable_data.votables;
 
 const createVotable = (model, votable) =>
