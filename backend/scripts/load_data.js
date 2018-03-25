@@ -132,6 +132,7 @@ db.connect().then(async (db) => {
 								: convertDemographic(col.key, row);
 						}
 
+            console.log('yoyoyo');
 						createCitizen(citizen_model, citizen)
 							.then(newCitizen => {
 
