@@ -42,6 +42,7 @@ exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
 };
 
 exports.getVotesGroupByState = contract_id => {
+	console.log(contract_id);
 	const getVotes = new Promise((resolve, reject) => {
 		fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
 			method: 'GET',
@@ -56,19 +57,21 @@ exports.getVotesGroupByState = contract_id => {
 				addresses,
 				response
 			} = responseBody.data.value;
-			console.log(response);
+			console.log('response '+response);
 
-			return resolve(response.map((res, index) => {
+			resolve(response.map((res, index) => {
 				return {
 					blockchainId: addresses[index],
 					choice: res
 				}
 			}))
 			.catch(error => {
-				return reject(error);
+				reject(error);
 			})
 		})
 	});
+
+	getVotes.then(() => {}).catch(() => {});
 
 	const getCitizens = new Promise((resolve, reject) => {
 
