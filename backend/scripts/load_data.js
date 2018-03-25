@@ -191,18 +191,19 @@ db.connect().then(async (db) => {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify(vote)
-                }, (error, doc) => {
+                }, async (error, doc) => {
                   console.log('ERROR on request side')
                   console.log(error);
                   console.log(doc);
+                  await sleep(1200);
               });
             });
-            await sleep(2000);
+            await sleep(1200);
           });
         });
       });
     });
-    await sleep(2000);
+    await sleep(1200);
   }// end foreach loop over votables
 });
 
