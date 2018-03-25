@@ -17,7 +17,8 @@ class Post extends Component {
 		super(props);
 
 		this.state = {
-			comment_open: false
+			comment_open: false,
+			comment: ''
 		};
 
 		this.renderComments = this.renderComments.bind(this);
@@ -36,7 +37,7 @@ class Post extends Component {
 
 	handleChange(event) {
 		this.setState({
-			value: event.target.value
+			comment: event.target.value
 		});
 	}
 
@@ -87,6 +88,7 @@ class Post extends Component {
 							             componentClass="textarea"
 							             bsClass="form-control"
 							             onChange={ this.handleChange }
+							             value={ this.state.comment }
 							             placeholder="What do you think about this idea?"/>
 							<br/>
 							<Button bsStyle="info"
