@@ -16,6 +16,41 @@ const createVotable = (model, votable) => new Promise((resolve, reject) => {
 	});
 });
 
+const createVotables = (votable_model, votables) =>
+	Promise.all(votables.map((votable, index) => {
+		return fetch('http://localhost:3333/contract/create', {
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				itemID: index,
+				responses: votable.choices
+			})
+		})
+			.then(response => response.json())
+			.then(response => {
+				// { data: { minedAddress: '' } }
+				console.log(response);
+				votable.contract_id = response.data.minedAddress;
+
+				delete votable.col;
+				return createVotable(votable_model, votable);
+			});
+	}));
+
+const convertDemographic = (key, row) => {
+  let data = row[key];
+  data--;
+  return data > labels[key].length || data < 0 || isNaN(data) ? "Don't Know" : labels[key][data];
+};
+
+const convertChoice = (key, row, choices) => {
+  let data = row[key];
+  data--;
+  return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
+};
+
 db.connect().then(async (db) => {
   /*******************************************************
    *******************************************************
@@ -41,36 +76,20 @@ db.connect().then(async (db) => {
 		{key: 'ideo', name: 'ideology'}
   ];
 
-	votables.every((votable, index) => {
-		fetch('http://localhost:3333/contract/create', {
-			method: "POST",
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				itemID: index,
-				responses: votable.choices
-			})
+	createVotables(votable_model, votables)
+		.then(resultArray => {
+			console.log(resultArray[0]);
+
+			// csv().fromFile(input_path)
+			// 	.on('json', row => {
+			//
+			// 	});
 		})
-			.then(response => response.json())
-			.then(response => {
-				console.log(response); 		// { data: { minedAddress: '0xd4551377391fcb97ed81da31e962ae55d295a26c' } }
-				votable.contract_id = response.data.minedAddress;
+		.catch(error => {
+			console.log(error);
+		});
 
-				delete votable.col;
-				console.log(votable);
 
-				return createVotable(votable_model, votable);
-			})
-			.then(newVotable => {
-				console.log(newVotable);
-			})
-			.catch(error => {
-				console.log(error);
-			});
-
-		return false;
-	});
 
   //
   // for(let i = 0; i < votables.length; i++) {
