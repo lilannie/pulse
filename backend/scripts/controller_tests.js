@@ -38,8 +38,8 @@ let votable = {
 };
 
 db.connect().then(async db => {
-  // post_ctrl.createPost(post_one);
-  // post_ctrl.createPost(post_two);
+    post_ctrl.createPost(post_one);
+    post_ctrl.createPost(post_two);
   // comment_ctrl.createComment(testComment);
   votable_ctrl.insert(votable);
 });

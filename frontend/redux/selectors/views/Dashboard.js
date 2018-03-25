@@ -1,7 +1,6 @@
 import { get_map_data_action } from "../../reducers/vote";
 import { get_votables_action } from "../../reducers/votable";
 
-
 export const mapStateToProps = state => {
 	return {
 		loading: state.map_data.loading || state.votables.loading,
@@ -20,7 +19,6 @@ export const mapDispatchToProps = dispatch => {
 		}
 	};
 };
-
 
 const data = {
 	"AL": [{

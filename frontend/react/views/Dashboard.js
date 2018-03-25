@@ -25,6 +25,10 @@ class Dashboard extends Component {
 		this.renderSelectOptions = this.renderSelectOptions.bind(this);
 	}
 
+	componentDidMount() {
+		this.props.dispatchGetVotables();
+	}
+
 	handleSelectChange(event) {
 		this.props.dispatchGetMapData(contract_id);
 		this.setState({
@@ -51,9 +55,7 @@ class Dashboard extends Component {
 					<Row>
 						<Col lg={12}>
 							Please select a poll question to visualize:
-							<input type="select">
-								{ this.renderSelectOptions }
-							</input>
+
 						</Col>
 					</Row>
 					<Row>
@@ -78,6 +80,7 @@ class Dashboard extends Component {
 Dashboard.PropTypes = {
 	loading: PropTypes.bool.isRequired,
 	data: PropTypes.array.isRequired,
+	dispatchGetVotables: PropTypes.func.isRequired,
 	dispatchGetMapData: PropTypes.func.isRequired
 };
 
