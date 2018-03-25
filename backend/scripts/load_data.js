@@ -3,7 +3,8 @@ const db = require('../mongo/config/database');
 const votable_data = require('./votables');
 const csv = require('csvtojson');
 const labels = require('./conversions');
-const Votable = require('../mongo/models/citizen_model');
+const Votable = require('../mongo/models/votable_model');
+const Citizen = require('../mongo/models/citizen_model');
 const sequential = require('promise-sequential');
 
 const createVotable = (model, votable) =>
@@ -15,70 +16,65 @@ const createVotable = (model, votable) =>
   });
 
 const createVotables = (votable_model, votables) =>
-  sequential(
-    votables.map((votable, index) => {
-      return fetch('http://localhost:3333/contract/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          itemID: index,
-          responses: votable.choices
-        })
-      })
-        .then(response => response.json())
-        .then(response => {
-          // { data: { minedAddress: '' } }
-          console.log(response);
-          votable.contract_id = response.data.minedAddress;
+	sequential(votables.map((votable, index) => {
+		return () => fetch('http://localhost:3333/contract/create', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				itemID: index,
+				responses: votable.choices
+			})
+		})
+			.then(response => response.json())
+			.then(response => {
+				// { data: { minedAddress: '' } }
+				console.log(response);
+				votable.contract_id = response.data.minedAddress;
 
-          delete votable.col;
-          return createVotable(votable_model, votable);
-        });
-    })
-  );
+				delete votable.col;
+				return createVotable(votable_model, votable);
+			});
+	}));
 
-const createCitizen = (citizen_model, citizen) =>
-  new Promise((resolve, reject) => {
-    fetch('http://localhost:3333/create/user', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => response.json())
-      .then(response => {
-        citizen.blockchainID = response.newUserAddress;
+const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) => {
+	fetch('http://localhost:3333/create/user', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(response => response.json())
+		.then(response => {
+			citizen.blockchainID = response.newUserAddress;
 
-        citizen_model.create(citizen, (error, newCitizen) => {
-          resolve(newCitizen);
-        });
-      })
-      .catch(error => {
-        reject(error);
-      });
-  });
+			citizen_model.create(citizen, (error, newCitizen) => {
+				resolve(newCitizen);
+			});
+		})
+		.catch(error => {
+			reject(error);
+		})
+});
 
 const createVote = vote =>
-  fetch('http://localhost:3333/contract/vote', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(vote)
-  });
+	fetch('http://localhost:3333/contract/vote', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(vote)
+	});
 
-const createVotes = (votables, voterAddress, choices) =>
-  sequential(
-    votables.map((votable, index) => {
-      return createVote({
-        voterAddress,
-        contractAddress: votable.contract_id,
-        response: choices[index]
-      });
-    })
-  );
+const createVotes = (votables, voterAddress, choices)  =>
+	sequential(votables.map((votable, index) => {
+		return () => createVote({
+			voterAddress,
+			contractAddress: votable.contract_id,
+			response: choices[index]
+		})
+	}));
 
 const convertDemographic = (key, row) => {
   let data = row[key];
@@ -118,6 +114,7 @@ db.connect().then(async db => {
     { key: 'ideo', name: 'ideology' }
   ];
 
+<<<<<<< HEAD
   createVotables(votable_model, votables)
     .then(voteableResults => {
       console.log(voteableResults);
@@ -153,4 +150,45 @@ db.connect().then(async db => {
     .catch(error => {
       console.log(error);
     });
+=======
+	createVotables(votable_model, votables)
+		.then(voteableResults => {
+			console.log(voteableResults);
+
+			csv().fromFile(input_path)
+				.on('json', row => {
+						const citizen = {
+							demographicInfo: {}
+						};
+
+						for (let col of demographics) {
+							const col_name = col.name != null ? col.name : col.key;
+
+							citizen.demographicInfo[col_name] = col.no_convert
+								? row[col.key]
+								: convertDemographic(col.key, row);
+						}
+
+            console.log('yoyoyo');
+						createCitizen(citizen_model, citizen)
+							.then(newCitizen => {
+
+								const userChoices = temp_votables.map(votable => {
+									return convertChoice(votable.col, row, votable.choices);
+								});
+
+								return createVotes(votables, newCitizen.blockchainID, userChoices);
+							})
+							.then(voteResults => {
+								console.log('SUCCESS');
+							})
+							.catch(error => {
+								console.log(error);
+							});
+				});
+		})
+		.catch(error => {
+			console.log(error);
+		});
+>>>>>>> 9188bcbfa707484fcd8cff6ab5a7b65329b6a997
 });

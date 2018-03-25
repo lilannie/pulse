@@ -35,17 +35,17 @@ class App extends Component {
 		}
 
     handleNotificationClick(position){
-        this.state._notificationSystem.addNotification({
-            title: (<span data-notify="icon" className="pe-7s-gift"></span>),
-            message: (
-                <div>
-                    Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.
-                </div>
-            ),
-            level: 'success',
-            position: position,
-            autoDismiss: 15,
-        });
+      this.state._notificationSystem.addNotification({
+        title: (<span data-notify="icon" className="pe-7s-gift"></span>),
+        message: (
+          <div>
+            Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for every web developer.
+          </div>
+        ),
+        level: 'success',
+        position: position,
+        autoDismiss: 15,
+      });
     }
 
     componentDidMount(){
@@ -62,7 +62,7 @@ class App extends Component {
         return (
           <div className="wrapper">
             <NotificationSystem ref="notificationSystem" style={style}/>
-            <Sidebar {...this.props} is_citizen={window.appData.user.is_citizen} />
+            <Sidebar {...this.props} />
             <div id="main-panel" className="main-panel">
               <Header {...this.props}/>
                 <Switch>

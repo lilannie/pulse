@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 
 import {
 	Grid,
-	Row
+	Row,
+	FormControl
 } from 'react-bootstrap';
 
 import { mapStateToProps, mapDispatchToProps } from '../../redux/selectors/views/ViewTopic';
@@ -28,7 +29,13 @@ class CreatePost extends Component {
 
 				<Grid fluid>
 					<Row>
-
+					<form onSubmit={this.handleSubmit}>
+						<label>
+							Name:
+							<input type="text" value={this.state.value} onChange={this.handleChange} />
+						</label>
+						<input type="submit" value="Submit" />
+					</form>
 					</Row>
 				</Grid>
 			</div>
