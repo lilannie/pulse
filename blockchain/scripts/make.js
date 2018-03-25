@@ -16,7 +16,7 @@ module.exports = (web3, contractAddressList) => {
 				var abiDefinition = JSON.parse(compiledCode.contracts[':Voting'].interface);
 				var VotingContract = web3.eth.contract(abiDefinition);
 				var byteCode = compiledCode.contracts[':Voting'].bytecode;
-				var deployedContract = VotingContract.new(itemID, JSON.parse(responses),{data: byteCode, from: web3.eth.accounts[0], gas: 9000000});
+				var deployedContract = VotingContract.new(itemID, responses,{data: byteCode, from: web3.eth.accounts[0], gas: 9000000});
 				var contractInstance = VotingContract.at(deployedContract.address);
 
 				while(true){
