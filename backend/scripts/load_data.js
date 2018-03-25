@@ -44,7 +44,7 @@ const createVotes = (votables, citizen_id, choices) =>
   Promise.all(
     votables.map((votable, index) => {
       return createVote({
-        citizen_id,
+        user_id: citizen_id,
         votable_id: votable._id,
         choice: choices[index]
       });
@@ -94,14 +94,12 @@ db.connect().then(async db => {
       csv()
         .fromFile(input_path)
         .on('json', row => {
-          const citizen = {
-            demographicInfo: {}
-          };
+          const citizen = {};
 
           for (let col of demographics) {
             const col_name = col.name != null ? col.name : col.key;
 
-            citizen.demographicInfo[col_name] = col.no_convert ? row[col.key] : convertDemographic(col.key, row);
+            citizen[col_name] = col.no_convert ? row[col.key] : convertDemographic(col.key, row);
           }
 
           createCitizen(citizen)
