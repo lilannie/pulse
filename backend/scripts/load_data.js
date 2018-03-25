@@ -3,7 +3,8 @@ const db = require('../mongo/config/database');
 const votable_data = require('./votables');
 const csv = require('csvtojson');
 const labels = require('./conversions');
-const Votable = require('../mongo/models/citizen_model');
+const Votable = require('../mongo/models/votable_model');
+const Citizen = require('../mongo/models/citizen_model');
 const sequential = require('promise-sequential');
 
 const createVotable = (model, votable) => new Promise((resolve, reject) => {
@@ -131,6 +132,7 @@ db.connect().then(async (db) => {
 								: convertDemographic(col.key, row);
 						}
 
+            console.log('yoyoyo');
 						createCitizen(citizen_model, citizen)
 							.then(newCitizen => {
 
