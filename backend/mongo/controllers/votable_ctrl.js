@@ -3,7 +3,6 @@ const Votable = require('../models/votable_model');
 const fetch = require('node-fetch');
 const Citizen = require('../models/citizen_model');
 
-
 exports.insert = legislature => {
   let votable = new Votable({
     _contract_id: legislature._contract_id,
@@ -28,7 +27,6 @@ exports.getVotableIDs = () => {
 };
 
 exports.getVoterHistory = user_blockchain_id => {
-<<<<<<< Updated upstream
   let blockchain_id = user_blockchain_id;
 
   fetch(`http://localhost:3333/contract/history/${blockchain_id}`)
@@ -40,12 +38,11 @@ exports.getVoterHistory = user_blockchain_id => {
   //   2: 'Neutral',
   //   3: 'Disagree'
   // };
-=======
 
-  Citizen.find({blockchainId: user_blockchain_id}, (citizen) => {
-    return new Promise(resolve, reject, () =>{
+  Citizen.find({ blockchainId: user_blockchain_id }, citizen => {
+    return new Promise(resolve, reject, () => {
       resolve(citizen);
-    })
+    });
   });
 
   // fetch(`http://localhost:3333/contract/history/${contract_id}`, {
@@ -56,7 +53,6 @@ exports.getVoterHistory = user_blockchain_id => {
   // })
   // .then(response => response.json())
   // .then(responseBody => console.log(responseBody))
->>>>>>> Stashed changes
 };
 
 exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
@@ -69,38 +65,34 @@ exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
 };
 
 exports.getVotesGroupByState = contract_id => {
-	console.log(contract_id);
-	const getVotes = new Promise((resolve, reject) => {
-		fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json'
-			}
-		})
-		.then(response => response.json())
-		.then(responseBody => {
-			// { data: { value: { addresses: [], response: [] } } }
-			const {
-				addresses,
-				response
-			} = responseBody.data.value;
-			console.log('response '+response);
+  console.log(contract_id);
+  const getVotes = new Promise((resolve, reject) => {
+    fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(responseBody => {
+        // { data: { value: { addresses: [], response: [] } } }
+        const { addresses, response } = responseBody.data.value;
+        console.log('response ' + response);
 
-			resolve(response.map((res, index) => {
-				return {
-					blockchainId: addresses[index],
-					choice: res
-				}
-			}))
-			.catch(error => {
-				reject(error);
-			})
-		})
-	});
+        resolve(
+          response.map((res, index) => {
+            return {
+              blockchainId: addresses[index],
+              choice: res
+            };
+          })
+        ).catch(error => {
+          reject(error);
+        });
+      });
+  });
 
-	getVotes.then(() => {}).catch(() => {});
+  getVotes.then(() => {}).catch(() => {});
 
-	const getCitizens = new Promise((resolve, reject) => {
-
-	});
+  const getCitizens = new Promise((resolve, reject) => {});
 };
