@@ -1,25 +1,56 @@
 const BrainJSClassifier = require('natural-brain');
 const classifier = new BrainJSClassifier();
+const nlp = require('keyword-extractor');
 const db = require('../mongo/config/database');
 const Votable = require('../mongo/models/votable_model');
+const votable_ctrl = require('../mongo/controllers/votable_ctrl');
+
+let topics = [];
 
 db.connect().then(db => {
-  db.model('Votable').find({}, doc => {
-    console.log(doc);
+  db.model('Votable').find({}, (err, doc) => {
+    let descriptions = [];
+    for (let i = 0; i < doc.length; i++) {
+      descriptions.push(doc[i].description);
+    }
+    for (let i = 0; i < descriptions.length; i++) {
+      let keywords = nlp.extract(descriptions[i], {
+        language: 'english',
+        remove_digits: true,
+        remove_duplicates: true
+      });
+      topics.push(keywords);
+    }
+    generateTopics(topics);
   });
 });
 
-classifier.addDocument('my unit-tests failed.', 'software');
-classifier.addDocument('tried the program, but it was buggy.', 'software');
-classifier.addDocument('tomorrow we will do standup.', 'meeting');
-classifier.addDocument('the drive has a 2TB capacity.', 'hardware');
-classifier.addDocument('i need a new power supply.', 'hardware');
-classifier.addDocument('can you play some new music?', 'music');
+const generateTopics = topics => {
+  const words = [];
+  const count = [];
 
-classifier.train();
+  topics.forEach(votable_topic => {
+    votable_topic.forEach(topic => {
+      let index = words.indexOf(topic);
+      if (index >= 0) {
+        const temp = count[index];
+        temp.count += 1;
+      } else {
+        count.push({
+          topic,
+          count: 1
+        });
+      }
+    });
+  });
 
-console.log(classifier.classify('did the tests pass?')); // -> software
-console.log(classifier.classify('did you buy a new drive?')); // -> hardware
-console.log(classifier.classify('What is the capacity?')); // -> hardware
-console.log(classifier.classify('Lets meet tomorrow?')); // -> meeting
-console.log(classifier.classify('Can you play some stuff?')); // -> music
+  // Sort results by votes
+  count.sort((obj1, obj2) => obj2.count - obj1.count);
+
+  console.log(count);
+
+  // Only display topics with more than 5 votes
+  const result = count.filter(ct => ct.count > 5);
+};
+
+votable_ctrl.getVotableIDs();
