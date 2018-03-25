@@ -27,10 +27,6 @@ exports.getVotableIDs = () => {
 exports.getVoterHistory = user_blockchain_id => {
   let blockchain_id = user_blockchain_id;
 
-  fetch(`http://localhost:3333/contract/history/${blockchain_id}`)
-    .then(res => res.json())
-    .then(json => console.log(json));
-
   // return {
   //   1: 'Agree', // _contract_id: choice the user made
   //   2: 'Neutral',
