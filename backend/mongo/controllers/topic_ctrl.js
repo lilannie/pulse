@@ -1,19 +1,21 @@
 const Topic = require('../models/topic_model');
+const Post = require('../models/post_model');
 
-exports.getAllTopics = () => {
-  new Promise((resolve, reject) => {
-    Topic.find((err, results) => {
-      if (err) {
-        console.log(err.stack);
-        return reject(err);
-      }
-      console.log(results);
-      resolve(results);
-    });
+exports.getAllTopics = () => new Promise((resolve, reject) => {
+  Topic.find((err, results) => {
+    if (err) {
+      console.log(err.stack);
+      return reject(err);
+    }
+    console.log(results);
+    resolve(results);
   });
-};
+});
 
 exports.getTopicPosts = topicID => {
+	Post.findAll({
+		topics
+	})
   // return [
   //     {
   //       _id: 1,

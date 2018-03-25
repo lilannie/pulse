@@ -14,7 +14,7 @@ app.use(express.static(path.resolve('public')));
 app.set('view engine', 'ejs');
 
 /** BEGIN MongoDB **/
-// db.connect();
+db.connect();
 /** END MongoDB **/
 
 /** BEGIN Authentication handlers **/

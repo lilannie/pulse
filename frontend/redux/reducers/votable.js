@@ -70,10 +70,21 @@ export const topic_votables =
 
 const post_create_votable = params => {
 	return new Promise((resolve, reject) => {
-		resolve({
-			status: 'Success',
-			error: null
-		});
+		fetch('localhost:8080/api/mongo/votable/insert', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(params)
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+				callback();
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
 };
 

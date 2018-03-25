@@ -2,11 +2,21 @@ import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
 const get_voter_history = params => {
 	return new Promise((resolve, reject) => {
-		resolve({
-			1: 'Agree',
-			2: 'Neutral',
-			3: 'Disagree'
-		});
+		fetch('localhost:8080/api/mongo/votable/getVoterHistory', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(params)
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+				callback();
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
 };
 

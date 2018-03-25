@@ -1,55 +1,34 @@
-const fetch = require('node-fetch');
 const Votable = require('../models/votable_model');
+const Vote = require('../models/vote_model');
 
-exports.insert = legislature => {
-  let votable = new Votable({
-    _contract_id: legislature._contract_id,
-    title: legislature.title,
-    description: legislature.description,
-    choices: legislature.choices,
-    topics: legislature.topics
+exports.insert = votable => new Promise((resolve, reject) => {
+	let votable = new Votable(votable);
+
+	votable.save((err, result) => {
+		if (err) {
+			reject(err);
+		}
+		resolve(result);
+	});
+});
+
+exports.getVoterHistory = params => new Promise ((resolve, reject) => {
+  Vote.findAll({ user_id: params.user_id }, (error, results) => {
+	  if (error) {
+		  reject(error);
+	  }
+
+	  let ret_val = {};
+
+	  for (let result of results) {
+	  	ret_val[result._id] = result.choice;
+	  }
+
+	  resolve(ret_val);
   });
+});
 
-  votable.save((err, result) => {
-    if (err) {
-      console.log(err.stack);
-    }
-    console.log('Doc Added Successfully!');
-  });
-};
-
-exports.getVotableIDs = () => {
-  Votable.distinct('._creator_id', (err, results) => {
-    console.log(results);
-  });
-};
-
-exports.getVoterHistory = user_blockchain_id => {
-  let blockchain_id = user_blockchain_id;
-
-  // return {
-  //   1: 'Agree', // _contract_id: choice the user made
-  //   2: 'Neutral',
-  //   3: 'Disagree'
-  // };
-
-  Citizen.find({ blockchainId: user_blockchain_id }, citizen => {
-    return new Promise(resolve, reject, () => {
-      resolve(citizen);
-    });
-  });
-
-  // fetch(`http://localhost:3333/contract/history/${contract_id}`, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   }
-  // })
-  // .then(response => response.json())
-  // .then(responseBody => console.log(responseBody))
-};
-
-exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
+exports.saveVote = (user_id, votable_contract_id, choice) => {
   // Check if user has already voted on the votable, if so update that vote
   // If the user has not already voted on the votable, create a vote
   // return {
