@@ -9,7 +9,7 @@ import {
 
 import { mapStateToProps, mapDispatchToProps } from '../../redux/selectors/views/ViewTopic';
 
-import FilterableChart from '../components/FilterableChart';
+import FilterableChart from '../components/FilterableMap';
 
 class Dashboard extends Component {
 	constructor(props) {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import PropTypes from 'prop-types';
+import USAMap from "react-usa-map";
 
 import Card from '../components/Card';
 
@@ -19,6 +20,10 @@ class FilterableChart extends Component {
 	handleSelectChange (value) {
 		console.log('You\'ve selected:', value);
 		this.setState({ value });
+	}
+
+	mapHandler(event) {
+		alert(event.target.dataset.name);
 	}
 
 	render() {
@@ -47,8 +52,7 @@ class FilterableChart extends Component {
 							value={ this.state.value }
 						/>
 
-						<div id="non-continguous-cartogram">
-						</div>
+						<USAMap onClick={this.mapHandler} />
 					</div>
 				}
 			/>

@@ -3,7 +3,8 @@ const db = require('../mongo/config/database');
 const votable_data = require('./votables');
 const csv = require('csvtojson');
 const labels = require('./conversions');
-const Votable = require('../mongo/models/citizen_model');
+const Votable = require('../mongo/models/votable_model');
+const Citizen = require('../mongo/models/citizen_model');
 const sequential = require('promise-sequential');
 
 const createVotable = (model, votable) => new Promise((resolve, reject) => {
@@ -16,25 +17,29 @@ const createVotable = (model, votable) => new Promise((resolve, reject) => {
 
 const createVotables = (votable_model, votables) =>
 	sequential(votables.map((votable, index) => {
-		return () => fetch('http://localhost:3333/contract/create', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				itemID: index,
-				responses: votable.choices
-			})
-		})
-			.then(response => response.json())
-			.then(response => {
-				// { data: { minedAddress: '' } }
-				console.log(response);
-				votable.contract_id = response.data.minedAddress;
+		return async () => {
+			await sleep(2000);
 
-				delete votable.col;
-				return createVotable(votable_model, votable);
-			});
+			return fetch('http://localhost:3333/contract/create', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					itemID: index,
+					responses: votable.choices
+				})
+			})
+				.then(response => response.json())
+				.then(response => {
+					// { data: { minedAddress: '' } }
+					console.log(response);
+					votable.contract_id = response.data.minedAddress;
+
+					delete votable.col;
+					return createVotable(votable_model, votable);
+				});
+		}
 	}));
 
 const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) => {
@@ -68,12 +73,17 @@ const createVote = vote =>
 
 const createVotes = (votables, voterAddress, choices)  =>
 	sequential(votables.map((votable, index) => {
-		return () => createVote({
-			voterAddress,
-			contractAddress: votable.contract_id,
-			response: choices[index]
-		})
+		return async () => {
+			await sleep(2000);
+
+			return createVote({
+				voterAddress,
+				contractAddress: votable.contract_id,
+				response: choices[index]
+			})
+		}
 	}));
+
 
 const convertDemographic = (key, row) => {
   let data = row[key];
