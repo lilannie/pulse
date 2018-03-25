@@ -77,17 +77,7 @@ db.connect().then(db => {
       // keep track of all cursors so we don't count dupes
       cursors.push(cursor);
     } // end if not a dupe cursor
-
-    // Use nlp to categorize questions and generate a list of topics
-    processText(descriptions);
   });
-
-  const processText = descriptions => {
-    for (let i = 0; i < descriptions.length; i++) {
-      // console.log(descriptions[i]);
-      // TODO
-    }
-  };
 
   /*******************************************************
    *    Load citizens + votables from dataset            *
@@ -167,7 +157,6 @@ db.connect().then(db => {
               votable_id: votable_id,
               choice: choice
             };
-
             //console.log(vote);
           } // end for loop over votables
         });
