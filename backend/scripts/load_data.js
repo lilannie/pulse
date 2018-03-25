@@ -30,8 +30,6 @@ const createCitizen = citizen => new Promise((resolve, reject) => {
 });
 
 const createVote = vote => new Promise((resolve, reject) => {
-	if (error) return reject(error);
-
 	Vote.create(vote, (error, newVote) => {
 		resolve(newVote);
 	});
