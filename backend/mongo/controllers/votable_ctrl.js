@@ -1,7 +1,7 @@
 const Votable = require('../models/votable_model');
 const fetch = require('node-fetch');
 const Citizen = require('../models/citizen_model');
-
+const _ = require('lodash');
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -60,21 +60,34 @@ exports.getVotesGroupByState = contract_id => {
 				response
 			} = responseBody.data.value;
 
-			resolve(response.map((res, index) => {
+			const votes = response.map((res, index) => {
 				return {
 					blockchainId: addresses[index],
 					choice: res
 				}
-			}))
+			});
+
+			return new Promise((resolve, reject) => {
+				Citizen.find({
+					'blockchainId': {
+						$in: addresses
+					}
+				}, (error, docs) => {
+					if (error) return reject(error);
+
+					resolve({
+						docs, votes
+					});
+				});
+			})
+			.then(({ docs, votes }) => {
+				resolve(_.groupBy(_.union(docs, votes, 'blockchainId'), 'demographicInfo.state'));
+			})
 			.catch(error => {
 				reject(error);
 			})
 		})
 	});
 
-	getVotes.then(() => {}).catch(() => {});
-
-	const getCitizens = new Promise((resolve, reject) => {
-
-	});
+	getVotes.then(result => console.log(result));
 };
