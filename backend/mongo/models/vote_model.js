@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const Vote = new mongoose.Schema({
-  voterAddress: String,
+	blockchainID: String,
   contractAddress: String,
 	response: String
 });

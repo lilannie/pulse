@@ -9,8 +9,8 @@ exports.getVotesGroupByState = contract_id => new Promise((resolve, reject) => {
 		console.log(votes);
 
 		Citizen.find({
-			'blockchainId': {
-				$in: votes.map(vote => vote.blockchainId)
+			'voterAddress': {
+				$in: votes.map(vote => vote.voterAddress)
 			}
 		}, (error, docs) => {
 			if (error) return reject(error);
