@@ -2,8 +2,11 @@ const Votable = require('../models/votable_model');
 
 exports.insert = legislature => {
   let votable = new Votable({
+    // _contract_id
+    // title
     description: legislature.description,
     choices: legislature.choices
+    // topics
   });
 
   votable.save((err, result) => {
@@ -15,6 +18,7 @@ exports.insert = legislature => {
 };
 
 exports.getVotableIDs = () => {
+  // TODO: Return a list of Contract IDs
   Votable.distinct('_id', (err, results) => {
     // console.log(results);
   });
