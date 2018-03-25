@@ -4,6 +4,7 @@ const votable_data = require('./votables');
 const csv = require('csvtojson');
 const labels = require('./conversions');
 const Votable = require('../mongo/models/citizen_model');
+const sequential = require('promise-sequential');
 
 const createVotable = (model, votable) => new Promise((resolve, reject) => {
 	model.create(votable, (err, newVotable) => {
@@ -14,7 +15,7 @@ const createVotable = (model, votable) => new Promise((resolve, reject) => {
 });
 
 const createVotables = (votable_model, votables) =>
-	Promise.all(votables.map((votable, index) => {
+	sequential(votables.map((votable, index) => {
 		return fetch('http://localhost:3333/contract/create', {
 			method: 'POST',
 			headers: {
@@ -66,7 +67,7 @@ const createVote = vote =>
 	});
 
 const createVotes = (votables, voterAddress, choices)  =>
-	Promise.all(votables.map((votable, index) => {
+	sequential(votables.map((votable, index) => {
 		return createVote({
 			voterAddress,
 			contractAddress: votable.contract_id,
