@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const Vote = new mongoose.Schema({
-  userId: String,
-  votableId: String,
-	choice: String
+  voterAddress: String,
+  contractAddress: String,
+	response: String
 });
 
 // Create a Votable Model and Export It
