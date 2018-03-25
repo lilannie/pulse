@@ -68,9 +68,6 @@ db.connect().then(async (db) => {
               };
 
               descriptions.push(votable.description);
-
-              // console.log(votes);
-              // console.log(votable);
               votable_ctrl.insert(votable);
             } // end if we have a question
           } // end foreach poll questions
@@ -165,7 +162,7 @@ db.connect().then(async (db) => {
           } // end foreach prop
 
           // make a get request to create a blockchain user
-          request.get('http://localhost:3333/create/user', (error, data) => {
+          request.get('http://localhost:3333/create/user', async (error, data) => {
             if(!data) return; 
             
             let json = JSON.parse(data.body);
@@ -186,7 +183,7 @@ db.connect().then(async (db) => {
                 response: choice
               };
 
-              //console.log(vote);
+              /* Make a final post request creating the vote */
               request.post({
                   url: 'http://localhost:3333/contract/vote',
                   method: "POST",
@@ -199,14 +196,13 @@ db.connect().then(async (db) => {
                   console.log(error);
                   console.log(doc);
               });
-              await sleep(1000);
             });
+            await sleep(2000);
           });
-          await sleep(1000); 
         });
       });
     });
-    await sleep(1000);
+    await sleep(2000);
   }// end foreach loop over votables
 });
 
