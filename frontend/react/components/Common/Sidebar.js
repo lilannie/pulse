@@ -13,7 +13,7 @@ class Sidebar extends Component{
         width: window.innerWidth
       };
 
-	    this._routes = getRoutes(this.props.is_citizen);
+	    this._routes = getRoutes(window.appData.user.is_citizen);
 
       this.activeRoute = this.activeRoute.bind(this);
     }
