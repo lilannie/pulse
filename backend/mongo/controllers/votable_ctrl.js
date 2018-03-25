@@ -1,6 +1,7 @@
 const Votable = require('../models/votable_model');
 const fetch = require('node-fetch');
-const Citizens = require('citizen_ctrl');
+const Citizen = require('../models/citizen_model');
+
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -41,5 +42,35 @@ exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
 };
 
 exports.getVotesGroupByState = contract_id => {
+	const getVotes = new Promise((resolve, reject) => {
+		fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+		.then(response => response.json())
+		.then(responseBody => {
+			// { data: { value: { addresses: [], response: [] } } }
+			const {
+				addresses,
+				response
+			} = responseBody.data.value;
+			console.log(response);
 
+			return resolve(response.map((res, index) => {
+				return {
+					blockchainId: addresses[index],
+					choice: res
+				}
+			}))
+			.catch(error => {
+				return reject(error);
+			})
+		})
+	});
+
+	const getCitizens = new Promise((resolve, reject) => {
+
+	});
 };
