@@ -32,3 +32,30 @@ export const post_save_vote_action =
 
 export const save_vote =
 	createReducerAsync(post_save_vote_action);
+
+const get_map_data = contract_id => {
+	return new Promise((resolve, reject) => {
+		fetch('localhost:8080/api/mongo/vote/getVotesGroupByState', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				contract_id
+			})
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+			})
+			.catch(error => {
+				reject(error);
+			})
+	});
+};
+
+export const get_map_data_action =
+	createActionAsync('GET_MAP_DATA_ACTION', get_map_data);
+
+export const map_data =
+	createReducerAsync(get_map_data_action);

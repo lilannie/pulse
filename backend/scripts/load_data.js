@@ -162,3 +162,7 @@ db.connect().then(async (db) => {
 			console.log(error);
 		});
 });
+
+const sleep = (ms) => {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}

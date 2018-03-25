@@ -25,23 +25,44 @@ module.exports = {
     },
     extensions: ['.js', '.jsx']
   },
+	node: {
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+		dns: 'empty'
+	},
   module: {
 		rules: [
       {
 	      test: /\.jsx?$/,
-	      exclude: /(node_modules|bower_components)/,
+	      exclude: [/(node_modules)/, /(backend)/,
+		      path.resolve(__dirname, 'node_modules'),
+		      path.resolve(__dirname, 'backend')
+	      ],
 	      loader: 'babel-loader'
       },
 	    {
 	    	test: /\.json?$/,
+		    exclude: [/(node_modules)/, /(backend)/,
+			    path.resolve(__dirname, 'node_modules'),
+			    path.resolve(__dirname, 'backend')
+		    ],
 		    loader: 'json-loader'
 	    },
       {
         test: /\.scss$/,
+	      exclude: [/(node_modules)/, /(backend)/,
+		      path.resolve(__dirname, 'node_modules'),
+		      path.resolve(__dirname, 'backend')
+	      ],
         loaders: ['style-loader', 'css-loader', 'sass-loader']
       },
 	    {
 	    	test: /\.css$/,
+		    exclude: [/(node_modules)/, /(backend)/,
+			    path.resolve(__dirname, 'node_modules'),
+			    path.resolve(__dirname, 'backend')
+		    ],
 		    loaders: ['style-loader', 'css-loader']
 	    }
     ]

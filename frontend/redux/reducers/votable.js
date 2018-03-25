@@ -82,3 +82,71 @@ export const post_create_votable_action =
 
 export const create_votable =
 	createReducerAsync(post_create_votable_action);
+
+const get_votables = params => {
+	return new Promise((resolve, reject) => {
+		resolve([
+			{
+				_contract_id: 1,
+				creator: {
+					firstName: 'Annie',
+					lastName: 'Steenson'
+				},
+				title: 'Votable Title',
+				description: 'Votable Description',
+				choices: ['Agree', 'Disagree', 'Neutral'],
+				rank: 1
+			},
+			{
+				_contract_id: 2,
+				creator: {
+					firstName: 'Annie',
+					lastName: 'Steenson'
+				},
+				title: 'Votable Title',
+				description: 'Votable Description',
+				choices: ['Agree', 'Disagree', 'Neutral'],
+				rank: 2
+			},
+			{
+				_contract_id: 3,
+				creator: {
+					firstName: 'Annie',
+					lastName: 'Steenson'
+				},
+				title: 'Votable Title',
+				description: 'Votable Description',
+				choices: ['Agree', 'Disagree', 'Neutral'],
+				rank: 3
+			},
+			{
+				_contract_id: 4,
+				creator: {
+					firstName: 'Annie',
+					lastName: 'Steenson'
+				},
+				title: 'Votable Title',
+				description: 'Votable Description',
+				choices: ['Agree', 'Disagree', 'Neutral'],
+				rank: 4
+			},
+			{
+				_contract_id: 5,
+				creator: {
+					firstName: 'Annie',
+					lastName: 'Steenson'
+				},
+				title: 'Votable Title',
+				description: 'Votable Description',
+				choices: ['Agree', 'Disagree', 'Neutral'],
+				rank: 5
+			}
+		]);
+	});
+};
+
+export const get_votables_action =
+	createActionAsync('GET_VOTABLES', get_votables);
+
+export const votables =
+	createReducerAsync(get_votables_action);

@@ -14,12 +14,14 @@ import {
 } from './topic';
 
 import {
-	topic_votables
+	topic_votables,
+	votables
 } from './votable';
 
 import {
 	voter_history,
-	save_vote
+	save_vote,
+	map_data
 } from './vote';
 
 const reducers = combineReducers({
@@ -28,8 +30,10 @@ const reducers = combineReducers({
 	topic,
 	topics,
 	topic_votables,
+	votables,
 	voter_history,
-	save_vote
+	save_vote,
+	map_data
 });
 
 export default reducers;

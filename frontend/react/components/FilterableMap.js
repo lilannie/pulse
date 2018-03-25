@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
-import 'react-select/dist/react-select.css';
 import PropTypes from 'prop-types';
 import USAMap from "react-usa-map";
 
 import Card from '../components/Card';
 
-class FilterableChart extends Component {
+class FilterableMap extends Component {
 	constructor(props) {
 		super(props);
 
@@ -60,10 +59,10 @@ class FilterableChart extends Component {
 	}
 }
 
-FilterableChart.PropTypes = {
+FilterableMap.PropTypes = {
 	filters: PropTypes.array.isRequired,
 	title: PropTypes.string.isRequired,
 	category: PropTypes.string.isRequired
 };
 
-export default FilterableChart;
+export default FilterableMap;
