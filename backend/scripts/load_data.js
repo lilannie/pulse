@@ -113,61 +113,118 @@ db.connect().then(db => {
   /* Insert votables */
 	db.model('Votable').insertMany(votables, (error, doc) => {
     votables = doc;
-	});
-
-  const convertDemographic = (key, row) => {
-		let data = row[key];
-		data--;
-		return data > labels[key].length || data < 0 || isNaN(data) ? "Don't Know" : labels[key][data];
-  };
-
-  const convertChoice = (key, row, choices) => {
-		let data = row[key];
-		data--;
-		return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
-	};
-  
-	csv()
-		.fromFile(input_path)
-		.on('json', row => {
-			let citizen_data = {blockchainID: 0, demographicInfo: {}};
-      
-			for (prop of demographics) {
-        let real_name = '';
-        
-        if(prop.name != null){
-          real_name = prop.name;
-        }else{
-          real_name = prop.key;
-        }
-
-				if (prop.no_convert) {
-					citizen_data.demographicInfo[real_name] = row[prop.key];
-				} else {
-					citizen_data.demographicInfo[real_name] = convertDemographic(prop.key, row);
-				} // end if dont convert
-      } // end foreach prop
-      
-      /* Create a citizen */
-      db.model('Citizen').create(citizen_data).then(citizen => {
-        /* Handle votes for a citizen */
-        let citizen_id = citizen._id;
-
-        for(let i = 0; i < votables.length; i++) {
-          let votable = votables[i];
-          let choices = votable.choices;
-          let choice = convertChoice(temp_votables[i].col, row, choices);
-          let votable_id = votable._id;
     
-          /* Store vote in Blockchain */
-          let vote = {
-            citizen_id: citizen_id,
-            votable_id: votable_id,
-            choice: choice
-          };
+    const convertDemographic = (key, row) => {
+      let data = row[key];
+      data--;
+      return data > labels[key].length || data < 0 || isNaN(data) ? "Don't Know" : labels[key][data];
+    };
+  
+    const convertChoice = (key, row, choices) => {
+      let data = row[key];
+      data--;
+      return data > choices.length || data < 0 || isNaN(data) ? "Don't Know" : choices[data];
+    };
+
+    for(let i = 0; i < votables.length; i++) {
+      let votable = votables[i];
+      let choices = votable.choices;
+      let votable_id = votable._id;
+      
+      /* Create the blockchain contract for each votable */
+      let contract = {
+        itemID: votable_id,
+        responses: choices
+      }
+  
+      request.post({
+        url: 'http://localhost:3333/contract/create',
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(contract)
+      }, (error, doc) => {
+        console.log('ERROR on request side')
+        console.log(error);
+        console.log(doc);
+      });
+    }// end foreach loop over votables
+
+    csv()
+      .fromFile(input_path)
+      .on('json', row => {
+        let citizen_data = { blockchainID: 0, demographicInfo: {} };
+        
+        for (prop of demographics) {
+          let real_name = '';
           
-          //console.log(vote);
-        } // end for loop over votables
+          if(prop.name != null){
+            real_name = prop.name;
+          }else{
+            real_name = prop.key;
+          }
+
+          if (prop.no_convert) {
+            citizen_data.demographicInfo[real_name] = row[prop.key];
+          } else {
+            citizen_data.demographicInfo[real_name] = convertDemographic(prop.key, row);
+          } // end if dont convert
+        } // end foreach prop
+        
+        request.get('http://localhost:3333/create/user', (error, data) => {
+            if(!data) return; 
+            
+            let json = JSON.parse(data.body);
+            let newUserAddress = json.newUserAddress;
+            citizen_data.blockchainID = newUserAddress;
+
+            /* Create a citizen */
+            db.model('Citizen').create(citizen_data).then(citizen => {
+              /* Handle votes for a citizen */
+              let citizen_id = citizen._id;
+
+              for(let i = 0; i < 1; i++) {
+                let votable = votables[i];
+                let choices = votable.choices;
+                let choice = convertChoice(temp_votables[i].col, row, choices);
+                let votable_id = votable._id;
+
+                let contract = {
+                  itemID: votable_id,
+                  responses: choices
+                }
+
+                // console.log('adding to database');
+                // console.log(contract);
+
+                // request.post({
+                //     url: 'http://localhost:3333/contract/create',
+                //     method: "POST",
+                //     headers: {
+                //       'Content-Type': 'application/json'
+                //     },
+                //     body: JSON.stringify(contract)
+                //   }, (error, doc) => {
+                //     console.log('ERROR on request side')
+                //     console.log(error);
+                //     console.log(doc);
+                // });
+          
+                /* Store vote in Blockchain */
+                let vote = {
+                  citizen_id: citizen_id,
+                  votable_id: votable_id,
+                  choice: choice
+                };
+                
+                //console.log(vote);
+              } // end for loop over votables
+          });
+        });
+
+        
     });
-  });
+
+	});
 });
