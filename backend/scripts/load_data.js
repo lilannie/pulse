@@ -78,7 +78,7 @@ db.connect().then(async (db) => {
 
 	createVotables(votable_model, votables)
 		.then(resultArray => {
-			console.log(resultArray[0]);
+			console.log(votables[0]);
 
 			// csv().fromFile(input_path)
 			// 	.on('json', row => {
