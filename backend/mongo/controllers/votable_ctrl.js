@@ -1,10 +1,5 @@
 const fetch = require('node-fetch');
 const Votable = require('../models/votable_model');
-<<<<<<< HEAD
-const fetch = require('node-fetch');
-const Citizen = require('../models/citizen_model');
-=======
->>>>>>> 7684bc101e1e50ebf01400b2428fab76d0f425bc
 
 exports.insert = legislature => {
   let votable = new Votable({
@@ -66,39 +61,3 @@ exports.saveVote = (user_blockchain_id, votable_contract_id, choice) => {
   //   error: null
   // };
 };
-
-<<<<<<< HEAD
-exports.getVotesGroupByState = contract_id => {
-  console.log(contract_id);
-  const getVotes = new Promise((resolve, reject) => {
-    fetch(`http://10.33.148.54:3333/contract/history/${contract_id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(response => response.json())
-      .then(responseBody => {
-        // { data: { value: { addresses: [], response: [] } } }
-        const { addresses, response } = responseBody.data.value;
-        console.log('response ' + response);
-
-        resolve(
-          response.map((res, index) => {
-            return {
-              blockchainId: addresses[index],
-              choice: res
-            };
-          })
-        ).catch(error => {
-          reject(error);
-        });
-      });
-  });
-
-  getVotes.then(() => {}).catch(() => {});
-
-  const getCitizens = new Promise((resolve, reject) => {});
-};
-=======
->>>>>>> 7684bc101e1e50ebf01400b2428fab76d0f425bc
