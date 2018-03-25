@@ -1,17 +1,18 @@
 const Topic = require('../models/topic_model');
 
 exports.getAllTopics = () => {
-  //   Topic.find((err, results) => {
-  //     if (err) {
-  //       console.err('Oh no! Something Went Wrong!');
-  //       console.log(err.stack);
-  //     } else {
-  //       console.log(results);
-  //     }
-  //   });
+  new Promise((resolve, reject) => {
+    Topic.find((err, results) => {
+      if (err) {
+        console.log(err.stack);
+        return reject(err);
+      }
+      console.log(results);
+      resolve(results);
+    });
+  });
 };
 
-// TODO
 exports.getTopicPosts = topicID => {
   // return [
   //     {
