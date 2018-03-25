@@ -1,6 +1,4 @@
 const fetch = require('node-fetch');
-const mongoose = require('mongoose');
-const nlp = require('compromise');
 const db = require('../mongo/config/database');
 const votable_data = require('./votables');
 const csv = require('csvtojson');
@@ -18,7 +16,7 @@ const createVotable = (model, votable) => new Promise((resolve, reject) => {
 const createVotables = (votable_model, votables) =>
 	Promise.all(votables.map((votable, index) => {
 		return fetch('http://localhost:3333/contract/create', {
-			method: "POST",
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -39,8 +37,16 @@ const createVotables = (votable_model, votables) =>
 	}));
 
 const createCitizen = (citizen_model, citizen) => new Promise((resolve, reject) => {
-	fetch('http://localhost:3333/create/user')
-		.then(response => response.json())
+	fetch('http://localhost:3333/create/user', {
+		method: 'GET',
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	})
+		.then(response => {
+			console.log(response);
+			return response.json()
+		})
 		.then(response => {
 			citizen.blockchainID = response.newUserAddress;
 
