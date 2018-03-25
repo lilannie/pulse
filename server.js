@@ -47,7 +47,7 @@ app.all('/*', (req, res) => {
     appData: JSON.stringify({
       user: {
         id: '1234567',
-        is_citizen: true
+        is_citizen: false
       }
     })
   });
