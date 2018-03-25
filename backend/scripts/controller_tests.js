@@ -5,7 +5,7 @@ const post_ctrl = require('../mongo/controllers/post_ctrl');
 const db = require('../mongo/config/database');
 
 let testComment = {
-  _creator_id: 2,
+  creator_id: 2,
   content: '~This is a super cool comment~',
   rank: 0,
   date: Date.now()
@@ -30,7 +30,7 @@ let post_two = {
 };
 
 let votable = {
-  _contract_id: 12345678,
+  contract_id: 12345678,
   title: 'DACA',
   description: 'Defend DACA',
   choices: ['I agree', 'I do not agree'],
