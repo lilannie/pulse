@@ -2,88 +2,21 @@ import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
 const get_topic_posts = params => {
 	return new Promise((resolve, reject) => {
-		resolve([
-			{
-				_id: 1,
-				content: 'Post Content',
-				rank: 1,
-				date_created: '03/24/2018 06:33:00',
-				location: {},
-				comments: [
-					{
-						_id: 1,
-						content: 'Comment Content',
-						rank: 1,
-						date_created: '03/24/2018 06:33:00'
-
-					}
-				],
+		fetch('http://localhost:8080/api/mongo/topic/getTopicPosts', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
 			},
-			{
-				_id: 2,
-				content: 'Post Content',
-				rank: 2,
-				date_created: '03/24/2018 06:33:00',
-				location: {},
-				comments: [
-					{
-						_id: 1,
-						content: 'Comment Content',
-						rank: 1,
-						date_created: '03/24/2018 06:33:00'
-
-					}
-				]
-			},
-			{
-				_id: 3,
-				content: 'Post Content',
-				rank: 3,
-				date_created: '03/24/2018 06:33:00',
-				location: {},
-				comments: [
-					{
-						_id: 1,
-						content: 'Comment Content',
-						rank: 1,
-						date_created: '03/24/2018 06:33:00'
-
-					}
-				]
-			},
-			{
-				_id: 4,
-				content: 'Post Content',
-				rank: 4,
-				date_created: '03/24/2018 06:33:00',
-				location: {},
-				comments: [
-					{
-						_id: 1,
-						content: 'Comment Content',
-						rank: 1,
-						date_created: '03/24/2018 06:33:00'
-
-					}
-				]
-			},
-			{
-				_id: 5,
-				content: 'Post Content',
-				rank: 5,
-				date_created: '03/24/2018 06:33:00',
-				location: {},
-				comments: [
-					{
-						_id: 1,
-						content: 'Comment Content',
-						rank: 1,
-						date_created: '03/24/2018 06:33:00'
-
-					}
-				]
-			}
-		]);
+			body: JSON.stringify(params)
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+				callback();
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
 };
 

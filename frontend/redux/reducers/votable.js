@@ -2,63 +2,20 @@ import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
 const get_topic_votables = params => {
 	return new Promise((resolve, reject) => {
-		resolve([
-			{
-				_contract_id: 1,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 1
+		fetch('http://localhost:8080/api/mongo/topic/getTopicVotables', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
 			},
-			{
-				_contract_id: 2,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 2
-			},
-			{
-				_contract_id: 3,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 3
-			},
-			{
-				_contract_id: 4,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 4
-			},
-			{
-				_contract_id: 5,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 5
-			}
-		]);
+			body: JSON.stringify(params)
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
 };
 
@@ -70,7 +27,7 @@ export const topic_votables =
 
 const post_create_votable = params => {
 	return new Promise((resolve, reject) => {
-		fetch('localhost:8080/api/mongo/votable/insert', {
+		fetch('http://localhost:8080/api/mongo/votable/saveVote', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -80,7 +37,6 @@ const post_create_votable = params => {
 			.then(response => response.json())
 			.then(response => {
 				resolve(response);
-				callback();
 			})
 			.catch(error => {
 				reject(error);
@@ -94,65 +50,21 @@ export const post_create_votable_action =
 export const create_votable =
 	createReducerAsync(post_create_votable_action);
 
-const get_votables = params => {
+const get_votables = () => {
 	return new Promise((resolve, reject) => {
-		resolve([
-			{
-				_contract_id: 1,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 1
-			},
-			{
-				_contract_id: 2,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 2
-			},
-			{
-				_contract_id: 3,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 3
-			},
-			{
-				_contract_id: 4,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 4
-			},
-			{
-				_contract_id: 5,
-				creator: {
-					firstName: 'Annie',
-					lastName: 'Steenson'
-				},
-				title: 'Votable Title',
-				description: 'Votable Description',
-				choices: ['Agree', 'Disagree', 'Neutral'],
-				rank: 5
+		fetch('http://localhost:8080/api/mongo/votable/getVotables', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
 			}
-		]);
+		})
+			.then(response => response.json())
+			.then(response => {
+				resolve(response);
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
 };
 

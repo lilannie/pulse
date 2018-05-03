@@ -30,13 +30,18 @@ app.post('/login', (req, res) => {
 });
 
 const controllers = {
+	topic: require('./backend/mongo/controllers/topic_ctrl'),
+	post: require('./backend/mongo/controllers/post_ctrl'),
+	comment: require('./backend/mongo/controllers/comment_ctrl'),
 	vote: require('./backend/mongo/controllers/vote_ctrl'),
 	votable: require('./backend/mongo/controllers/votable_ctrl')
 };
 
 app.post('/api/mongo/:controller/:method', (req, res) => {
+	console.log(req.params);
 	controllers[req.params.controller][req.params.method](req.body)
 		.then(result => {
+			console.log(result);
 			res.send(result);
 		})
 		.catch(error => {
@@ -61,8 +66,8 @@ app.all('/*', (req, res) => {
 
     appData: JSON.stringify({
       user: {
-        id: '1234567',
-        is_citizen: false
+        id: '5ab7246f933609691c21ef0a',
+        is_citizen: true
       }
     })
   });

@@ -19,7 +19,7 @@ module.exports = {
 	 * 	  topics: [ ids ]
 	 * 	}
 	 */
-	creatVotable: votable => {
+	createVotable: votable => {
 		return {
 			status: 'Success',
 			error: null

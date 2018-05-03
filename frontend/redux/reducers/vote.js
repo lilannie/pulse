@@ -2,7 +2,7 @@ import { createActionAsync, createReducerAsync } from 'redux-act-async';
 
 const get_voter_history = params => {
 	return new Promise((resolve, reject) => {
-		fetch('localhost:8080/api/mongo/votable/getVoterHistory', {
+		fetch('http://localhost:8080/api/mongo/votable/getVoterHistory', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ export const save_vote =
 
 const get_map_data = contract_id => {
 	return new Promise((resolve, reject) => {
-		fetch('localhost:8080/api/mongo/vote/getVotesGroupByState', {
+		fetch('http://localhost:8080/api/mongo/vote/getVotesGroupByState', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

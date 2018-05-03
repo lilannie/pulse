@@ -36,3 +36,12 @@ exports.saveVote = (user_id, votable_contract_id, choice) => {
   //   error: null
   // };
 };
+
+exports.getVotables = params => new Promise ((resolve, reject) => {
+	Vote.findAll({}, (error, results) => {
+		if (error) {
+			reject(error);
+		}
+		resolve(results);
+	});
+});

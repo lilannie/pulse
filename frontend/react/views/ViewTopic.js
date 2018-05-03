@@ -20,11 +20,11 @@ class ViewTopic extends Component {
 		super(props);
 
 		this._topicParam = {
-			topic_id: match.params.id
+			topic_id: this.props.match.params.id
 		};
 
 		this._userParam = {
-			user_blockchain_id: this.context.user.id
+			user_id: window.appData.user.id
 		};
 
 		this.renderTopicItems = this.renderTopicItems.bind(this);
@@ -66,7 +66,6 @@ class ViewTopic extends Component {
 		const {
 			dispatchCreateComment,
 			dispatchGetPosts,
-			match
 		} = this.props;
 
 		dispatchCreateComment(
